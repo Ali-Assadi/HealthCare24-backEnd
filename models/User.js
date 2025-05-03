@@ -1,0 +1,18 @@
+const mongoose = require('mongoose');
+const ExerciseWeekSchema = require('./exercisePlan'); // make sure path is correct
+
+const UserSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  age: Number,
+  height: Number,
+  weight: Number,
+  details: { type: String, default: '' },
+  dietPlan: { type: Array, default: [] },
+  goal: { type: String, default: '' },
+  mustUpdatePassword: { type: Boolean, default: false },
+  isAdmin: { type: Boolean, default: false },
+  exercisePlan: [ExerciseWeekSchema]  // <- ✅ new field
+});
+
+module.exports = mongoose.model('User', UserSchema);
