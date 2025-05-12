@@ -1,173 +1,240 @@
-const Cart = require('../models/Cart');
-const Product = require('../models/Products');
-const mongoose = require('mongoose');
+const express = require("express");
+const router = express.Router();
+const Cart = require("../models/Cart");
+const Product = require("../models/Product");
+const mongoose = require("mongoose");
 
-async function getCart(req, res) {
-    try {
-        const { userId } = req.params;
-        if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(400).json({ error: 'Invalid user ID' });
+// 📦 Get Cart by User ID
+router.get("/:userId", async (req, res) => {
+  const { userId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ error: "Invalid user ID" });
+  }
 
-        const cart = await Cart.findOne({ userId }).populate('items.productId', 'name price');
-        if (!cart) return res.status(404).json({ error: 'Cart not found for this user' });
+  try {
+    const cart = await Cart.findOne({ userId }).populate(
+      "items.productId",
+      "name price"
+    );
+    if (!cart)
+      return res.status(404).json({ error: "Cart not found for this user" });
 
-        res.status(200).json(cart);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve cart', details: error.message });
+    res.status(200).json(cart);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Failed to retrieve cart", details: err.message });
+  }
+});
+
+// 🛒 Create Cart for User (if not exists)
+router.post("/:userId", async (req, res) => {
+  const { userId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ error: "Invalid User ID" });
+  }
+
+  try {
+    let cart = await Cart.findOne({ userId });
+    if (!cart) {
+      const newCart = new Cart({ userId, items: [], totalPrice: 0 });
+      cart = await newCart.save();
     }
-}
 
-async function createCart(req, res) {
-    try {
-        const { userId } = req.params;
-        if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(400).json({ error: 'Invalid User ID' });
+    res.status(200).json(cart);
+  } catch (err) {
+    res.status(500).json({
+      error: "Failed to create or retrieve cart",
+      details: err.message,
+    });
+  }
+});
 
-        let cart = await Cart.findOne({ userId });
-        if (!cart) {
-            const newCart = new Cart({ userId, items: [], totalPrice: 0 });
-            cart = await newCart.save();
-            return res.status(201).json(cart);
-        } else {
-            return res.status(200).json(cart);
-        }
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to create or retrieve cart', details: error.message });
+// ➕ Add Item to Cart
+router.post("/:userId/add", async (req, res) => {
+  const { userId } = req.params;
+  const { productId, quantity } = req.body;
+
+  if (
+    !mongoose.Types.ObjectId.isValid(userId) ||
+    !mongoose.Types.ObjectId.isValid(productId)
+  ) {
+    return res.status(400).json({ error: "Invalid user or product ID" });
+  }
+
+  if (!quantity || quantity < 1) {
+    return res.status(400).json({ error: "Quantity must be at least 1" });
+  }
+
+  try {
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+    if (product.quantity < quantity)
+      return res.status(400).json({ error: "Insufficient product quantity" });
+
+    let cart = await Cart.findOne({ userId });
+    if (!cart) {
+      const newCart = new Cart({
+        userId,
+        items: [{ productId, quantity, price: product.price }],
+        totalPrice: product.price * quantity,
+      });
+      cart = await newCart.save();
+      product.quantity -= quantity;
+      await product.save();
+      return res.status(201).json(cart);
     }
-}
 
-async function addItemToCart(req, res) {
-    try {
-        const { userId } = req.params;
-        const { productId, quantity } = req.body;
+    const itemIndex = cart.items.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+    if (itemIndex > -1) {
+      cart.items[itemIndex].quantity += quantity;
+    } else {
+      cart.items.push({ productId, quantity, price: product.price });
+    }
 
-        if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(productId))
-            return res.status(400).json({ error: 'Invalid user or product ID' });
+    product.quantity -= quantity;
+    await product.save();
 
-        if (!quantity || quantity < 1) return res.status(400).json({ error: 'Quantity must be at least 1' });
+    cart.totalPrice = cart.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    await cart.save();
 
-        const product = await Product.findById(productId);
-        if (!product) return res.status(404).json({ error: 'Product not found' });
-        if (product.quantity < quantity) return res.status(400).json({ error: 'Insufficient product quantity' });
+    res.status(200).json(cart);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Failed to add item to cart", details: err.message });
+  }
+});
 
-        let cart = await Cart.findOne({ userId });
-        if (!cart) {
-            const newCart = new Cart({ userId, items: [{ productId, quantity, price: product.price }], totalPrice: product.price * quantity });
-            cart = await newCart.save();
-            product.quantity -= quantity;
-            await product.save();
-            return res.status(201).json(cart);
-        }
+// ✏️ Update Item Quantity
+router.put("/:userId/update", async (req, res) => {
+  const { userId } = req.params;
+  const { productId, quantity } = req.body;
 
-        const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
-        if (itemIndex > -1) {
-            cart.items[itemIndex].quantity += quantity;
-        } else {
-            cart.items.push({ productId, quantity, price: product.price });
-        }
-        product.quantity -= quantity;
+  if (
+    !mongoose.Types.ObjectId.isValid(userId) ||
+    !mongoose.Types.ObjectId.isValid(productId)
+  ) {
+    return res.status(400).json({ error: "Invalid user or product ID" });
+  }
+
+  if (!quantity || quantity < 1) {
+    return res.status(400).json({ error: "Quantity must be at least 1" });
+  }
+
+  try {
+    const cart = await Cart.findOne({ userId });
+    if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+    const itemIndex = cart.items.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+    if (itemIndex === -1)
+      return res.status(404).json({ error: "Item not found in cart" });
+
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+
+    const quantityDiff = quantity - cart.items[itemIndex].quantity;
+    if (product.quantity < quantityDiff)
+      return res.status(400).json({ error: "Insufficient product quantity" });
+
+    cart.items[itemIndex].quantity = quantity;
+    product.quantity -= quantityDiff;
+    await product.save();
+
+    cart.totalPrice = cart.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    await cart.save();
+
+    res.status(200).json(cart);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Failed to update item", details: err.message });
+  }
+});
+
+// ❌ Remove Item from Cart
+router.delete("/:userId/remove", async (req, res) => {
+  const { userId } = req.params;
+  const { productId } = req.body;
+
+  if (
+    !mongoose.Types.ObjectId.isValid(userId) ||
+    !mongoose.Types.ObjectId.isValid(productId)
+  ) {
+    return res.status(400).json({ error: "Invalid IDs" });
+  }
+
+  try {
+    const cart = await Cart.findOne({ userId });
+    if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+    const itemIndex = cart.items.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+    if (itemIndex === -1)
+      return res.status(404).json({ error: "Item not found in cart" });
+
+    const removedQty = cart.items[itemIndex].quantity;
+    const product = await Product.findById(productId);
+    if (product) {
+      product.quantity += removedQty;
+      await product.save();
+    }
+
+    cart.items.splice(itemIndex, 1);
+    cart.totalPrice = cart.items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    await cart.save();
+
+    res.status(200).json(cart);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Failed to remove item", details: err.message });
+  }
+});
+
+// 🧹 Clear Cart
+router.delete("/:userId/clear", async (req, res) => {
+  const { userId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ error: "Invalid user ID" });
+  }
+
+  try {
+    const cart = await Cart.findOne({ userId });
+    if (!cart) return res.status(404).json({ error: "Cart not found" });
+
+    for (const item of cart.items) {
+      const product = await Product.findById(item.productId);
+      if (product) {
+        product.quantity += item.quantity;
         await product.save();
-
-        cart.totalPrice = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        await cart.save();
-        res.status(200).json(cart);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to add item to cart', details: error.message });
+      }
     }
-}
 
-async function updateCartItemQuantity(req, res) {
-    try {
-        const { userId } = req.params;
-        const { productId, quantity } = req.body;
+    cart.items = [];
+    cart.totalPrice = 0;
+    await cart.save();
 
-        if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(productId))
-            return res.status(400).json({ error: 'Invalid user or product ID' });
+    res.status(200).json({ message: "Cart cleared successfully" });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Failed to clear cart", details: err.message });
+  }
+});
 
-        if (!quantity || quantity < 1) return res.status(400).json({ error: 'Quantity must be at least 1' });
-
-        let cart = await Cart.findOne({ userId });
-        if (!cart) return res.status(404).json({ error: 'Cart not found' });
-
-        const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
-        if (itemIndex === -1) return res.status(404).json({ error: 'Item not found in cart' });
-
-        const product = await Product.findById(productId);
-        if (!product) return res.status(404).json({ error: 'Product not found' });
-
-        const quantityDiff = quantity - cart.items[itemIndex].quantity;
-        if (product.quantity < quantityDiff) return res.status(400).json({ error: 'Insufficient product quantity' });
-
-        cart.items[itemIndex].quantity = quantity;
-        product.quantity -= quantityDiff;
-        await product.save();
-
-        cart.totalPrice = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        await cart.save();
-        res.status(200).json(cart);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to update cart item quantity', details: error.message });
-    }
-}
-
-async function removeItemFromCart(req, res) {
-    try {
-        const { userId } = req.params;
-        const { productId } = req.body;
-
-        if (!mongoose.Types.ObjectId.isValid(userId) || !mongoose.Types.ObjectId.isValid(productId))
-            return res.status(400).json({ error: 'Invalid user or product ID' });
-
-        const cart = await Cart.findOne({ userId });
-        if (!cart) return res.status(404).json({ error: 'Cart not found' });
-
-        const itemIndex = cart.items.findIndex(item => item.productId.toString() === productId);
-        if (itemIndex === -1) return res.status(404).json({ error: 'Item not found in cart' });
-
-        const removedQuantity = cart.items[itemIndex].quantity;
-        const product = await Product.findById(productId);
-        if (product) {
-            product.quantity += removedQuantity;
-            await product.save();
-        }
-
-        cart.items.splice(itemIndex, 1);
-        cart.totalPrice = cart.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-        await cart.save();
-        res.status(200).json(cart);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to remove item', details: error.message });
-    }
-}
-
-async function clearCart(req, res) {
-    try {
-        const { userId } = req.params;
-        if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(400).json({ error: 'Invalid user ID' });
-
-        const cart = await Cart.findOne({ userId });
-        if (!cart) return res.status(404).json({ error: 'Cart not found' });
-
-        for (const item of cart.items) {
-            const product = await Product.findById(item.productId);
-            if (product) {
-                product.quantity += item.quantity;
-                await product.save();
-            }
-        }
-
-        cart.items = [];
-        cart.totalPrice = 0;
-        await cart.save();
-        res.status(200).json({ message: 'Cart cleared successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to clear cart', details: error.message });
-    }
-}
-
-module.exports = {
-    getCart,
-    createCart,
-    addItemToCart,
-    updateCartItemQuantity,
-    removeItemFromCart,
-    clearCart,
-};
+module.exports = router;

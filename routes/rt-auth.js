@@ -14,7 +14,6 @@ router.post("/signup", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // ✅ Here is where you insert the extended data
     const newUser = new User({
       email,
       password: hashedPassword,
@@ -26,7 +25,13 @@ router.post("/signup", async (req, res) => {
 
     await newUser.save();
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({
+      message: "User created successfully",
+      _id: newUser._id, // ✅ Include _id here
+      email: newUser.email,
+      isAdmin: newUser.isAdmin || false,
+      mustUpdate: newUser.mustUpdatePassword || false,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to register user" });
@@ -53,6 +58,7 @@ router.post("/signin", async (req, res) => {
         mustUpdate: true,
         isAdmin: user.isAdmin || false,
         email: user.email,
+        _id: user._id,
       });
     }
 
@@ -60,8 +66,9 @@ router.post("/signin", async (req, res) => {
     res.status(200).json({
       message: "Logged in successfully",
       mustUpdate: false,
-      isAdmin : user.isAdmin || false,
+      isAdmin: user.isAdmin || false,
       email: user.email,
+      _id: user._id,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -72,7 +79,7 @@ router.post("/signin", async (req, res) => {
 router.get("/user/:email", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email });
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
     res.json(user); // send full user info (no field selection)
   } catch (err) {
@@ -189,22 +196,22 @@ router.put("/update-password", async (req, res) => {
   }
 });
 // Delete user account
-router.delete('/user/:email', async (req, res) => {
-    try {
-      const result = await User.deleteOne({ email: req.params.email });
-  
-      if (result.deletedCount === 0) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      res.status(200).json({ message: 'User deleted successfully' });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Failed to delete user' });
+router.delete("/user/:email", async (req, res) => {
+  try {
+    const result = await User.deleteOne({ email: req.params.email });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "User not found" });
     }
-  });
-  // Save or update user diet plan
-router.put('/user/:email/diet', async (req, res) => {
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to delete user" });
+  }
+});
+// Save or update user diet plan
+router.put("/user/:email/diet", async (req, res) => {
   const { goal, plan } = req.body;
 
   try {
@@ -214,10 +221,10 @@ router.put('/user/:email/diet', async (req, res) => {
       { new: true }
     );
 
-    if (!user) return res.status(404).json({ message: 'User not found' });
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.json({ message: 'Diet plan saved', user });
+    res.json({ message: "Diet plan saved", user });
   } catch (err) {
-    res.status(500).json({ message: 'Error saving diet plan', error: err });
+    res.status(500).json({ message: "Error saving diet plan", error: err });
   }
 });
