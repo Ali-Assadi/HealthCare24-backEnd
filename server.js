@@ -15,6 +15,9 @@ const notificationRoutes = require("./routes/rt-notification");
 const cartRoutes = require("./routes/rt-cart");
 const productsRoutes = require("./routes/rt-products");
 const orderRoutes = require("./routes/rt-order");
+const healthArticlesRoute = require("./routes/rt-healthArticle");
+const nutritionRoute = require("./routes/rt-nutritionArticles");
+const fitnessArticlesRoute = require("./routes/rt-fitnessArtciles");
 
 const app = express();
 
@@ -43,6 +46,9 @@ app.use("/api", notificationRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/products", productsRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/healthArticles", healthArticlesRoute);
+app.use("/api/nutritionArticles", nutritionRoute);
+app.use("/api/fitnessArticles", fitnessArticlesRoute);
 
 const PORT = 3000;
 app.listen(PORT, () =>

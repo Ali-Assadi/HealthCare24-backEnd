@@ -21,7 +21,7 @@ router.post("/:userId", async (req, res) => {
     const newOrder = new Order({
       userId,
       items: cart.items,
-      totalPrice: cart.totalPrice,
+      totalPrice: parseFloat(cart.totalPrice.toFixed(2)),
     });
 
     await newOrder.save();
