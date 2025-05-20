@@ -22,6 +22,15 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch product" });
   }
 });
+// GET /api/products/category/:category
+router.get("/category/:category", async (req, res) => {
+  try {
+    const products = await Product.find({ category: req.params.category });
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch products by category" });
+  }
+});
 
 // ➕ Add new product
 router.post("/", async (req, res) => {
