@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
-
-// ✅ Sign Up Route
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
+// ✅ Sign Up Route with Email Sending
 router.post("/signup", async (req, res) => {
   const { email, password, age, height, weight, details } = req.body;
 
@@ -25,9 +26,36 @@ router.post("/signup", async (req, res) => {
 
     await newUser.save();
 
+    // ✅ Send Welcome Email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "appservicehealthcare24@gmail.com",
+        pass: "otqs fvii gfhu iaaa",
+      },
+    });
+
+    const mailOptions = {
+      from: "appservicehealthcare24@gmail.com",
+      to: email,
+      subject: "🎉 Welcome to HealthCare24!",
+      html: `
+        <div style="font-family: Arial, sans-serif; background-color: #f8f9fa; padding: 20px; border-radius: 10px;">
+          <h2 style="color: #2c3e50;">Welcome to <span style="color: #4CAF50;">HealthCare24</span>!</h2>
+          <p>Hi there 👋,</p>
+          <p>Thank you for registering with us. Your health and fitness goals are now one step closer! 🏃‍♀️💪</p>
+          <p>If you ever need help, feel free to reach out. We're excited to support you!</p>
+          <hr style="margin: 20px 0;">
+          <p style="font-size: 13px; color: #888;">This email was sent automatically. Please do not reply.</p>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
     res.status(201).json({
       message: "User created successfully",
-      _id: newUser._id, // ✅ Include _id here
+      _id: newUser._id,
       email: newUser.email,
       isAdmin: newUser.isAdmin || false,
       mustUpdate: newUser.mustUpdatePassword || false,
@@ -38,7 +66,6 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-module.exports = router;
 // Sign In Route
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
@@ -105,48 +132,44 @@ router.put("/user/:email", async (req, res) => {
     res.status(500).json({ message: "Failed to update user" });
   }
 });
-const nodemailer = require("nodemailer");
-const crypto = require("crypto");
 
-// Forgot Password - Send Temp Password
 router.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
 
   if (!user) return res.status(404).json({ message: "User not found" });
 
-  // Generate random temporary password
   const tempPassword = crypto.randomBytes(4).toString("hex");
   const hashedPassword = await bcrypt.hash(tempPassword, 10);
 
-  // Update user with temp password and flag
   user.password = hashedPassword;
   user.mustUpdatePassword = true;
   await user.save();
 
-  // Send email
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "konanai0699@gmail.com",
-      pass: "frfb zgwg gjua tcjc",
+      user: "appservicehealthcare24@gmail.com",
+      pass: "otqs fvii gfhu iaaa",
     },
   });
 
   const mailOptions = {
-    from: "konanai0699@gmail.com",
+    from: "appservicehealthcare24@gmail.com",
     to: email,
-    subject: "Password Reset",
+    subject: "🔑 Reset Your Password - HealthCare24",
     html: `
-        <div style="font-family: 'Arial', sans-serif; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
-          <h2 style="color: #333;">Reset Your Password</h2>
-          <p>Your temporary password is:</p>
-          <p style="font-size: 18px; font-weight: bold;">${tempPassword}</p>
-          <p>Please use this password to log in, then update your password immediately.</p>
-          <p>
-            <a href="http://localhost:4200/update-password?email=${encodeURIComponent(
-              email
-            )}" style="
+      <div style="font-family: 'Arial', sans-serif; padding: 20px; background-color: #f5f5f5; border-radius: 8px;">
+        <h2 style="color: #333;">Temporary Password Issued</h2>
+        <p>Hi,</p>
+        <p>You’ve requested to reset your password. Use the temporary password below to log in:</p>
+        <p style="font-size: 18px; font-weight: bold;">${tempPassword}</p>
+        <p>Then, click the link below to update your password:</p>
+        <p>
+          <a href="http://localhost:4200/update-password?email=${encodeURIComponent(
+            email
+          )}"
+            style="
               display: inline-block;
               margin-top: 10px;
               padding: 10px 20px;
@@ -156,25 +179,26 @@ router.post("/forgot-password", async (req, res) => {
               border-radius: 8px;
               font-weight: bold;
             ">
-              Click here to update your password
-            </a>
-          </p>
-          <p style="margin-top: 20px; font-size: 13px; color: #777;">
-            If you didn’t request a password reset, you can ignore this email.
-          </p>
-        </div>
-      `,
+            🔒 Update Password Now
+          </a>
+        </p>
+        <p style="margin-top: 20px; font-size: 13px; color: #777;">
+          If you didn’t request this reset, you can safely ignore this email.
+        </p>
+      </div>
+    `,
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    res.json({ message: "Temporary password and link sent!" });
+    res.json({ message: "✅ Temporary password and link sent!" });
   } catch (err) {
+    console.error("❌ Email sending failed:", err);
     res.status(500).json({ message: "Email failed", error: err });
   }
 });
 
-//Update Password
+// Update Password with confirmation email
 router.put("/update-password", async (req, res) => {
   const { email, newPassword } = req.body;
 
@@ -184,17 +208,47 @@ router.put("/update-password", async (req, res) => {
       { email },
       {
         password: hashedPassword,
-        mustUpdatePassword: false, // ✅ disable the temp login flag
+        mustUpdatePassword: false,
       }
     );
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.status(200).json({ message: "Password updated successfully" });
+    // ✅ Send confirmation email
+    const nodemailer = require("nodemailer");
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "appservicehealthcare24@gmail.com",
+        pass: "otqs fvii gfhu iaaa",
+      },
+    });
+
+    const mailOptions = {
+      from: "appservicehealthcare24@gmail.com",
+      to: email,
+      subject: "🔐 Your Password Was Updated",
+      html: `
+        <div style="font-family: Arial, sans-serif; background-color: #f0f4f8; padding: 20px; border-radius: 10px;">
+          <h2 style="color: #333;">Password Updated Successfully</h2>
+          <p>Hi,</p>
+          <p>This is a confirmation that your password has been updated for your HealthCare24 account.</p>
+          <p>If you did not perform this action, please contact support immediately.</p>
+          <hr style="margin: 20px 0;">
+          <p style="font-size: 13px; color: #888;">This is an automated message. Please do not reply.</p>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: "Password updated and email sent." });
   } catch (err) {
+    console.error("❌ Failed to update password or send email", err);
     res.status(500).json({ error: "Failed to update password" });
   }
 });
+
 // Delete user account
 router.delete("/user/:email", async (req, res) => {
   try {
@@ -228,3 +282,5 @@ router.put("/user/:email/diet", async (req, res) => {
     res.status(500).json({ message: "Error saving diet plan", error: err });
   }
 });
+
+module.exports = router;
