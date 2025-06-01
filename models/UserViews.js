@@ -6,6 +6,7 @@ const userViewsSchema = new mongoose.Schema({
     {
       topic: { type: String },
       section: { type: String },
+      subType: { type: String },
       date: { type: Date, default: Date.now },
     },
   ],

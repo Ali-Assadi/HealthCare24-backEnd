@@ -283,4 +283,22 @@ router.put("/user/:email/diet", async (req, res) => {
   }
 });
 
+//review
+router.post("/user/:email/review", async (req, res) => {
+  const { email } = req.params;
+  const { text } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.reviews.push({ text });
+    await user.save();
+
+    res.status(200).json({ message: "Review saved successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to save review", error: err });
+  }
+});
+
 module.exports = router;

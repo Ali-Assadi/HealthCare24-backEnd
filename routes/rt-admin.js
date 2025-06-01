@@ -5,13 +5,24 @@ const User = require("../models/User");
 // ✅ Route to get all non-admin users
 router.get("/users", async (req, res) => {
   try {
-    const users = await User.find({}, "-password"); // exclude passwords
+    const users = await User.find({ isAdmin: false }, "-password");
     res.json(users);
   } catch (err) {
     console.error("[ERROR] Failed to fetch users:", err);
     res.status(500).json({ message: "Failed to fetch users" });
   }
 });
+// ✅ Get all admin users
+router.get("/admins", async (req, res) => {
+  try {
+    const admins = await User.find({ isAdmin: true }, "-password");
+    res.json(admins);
+  } catch (err) {
+    console.error("[ERROR] Failed to fetch admins:", err);
+    res.status(500).json({ message: "Failed to fetch admin users" });
+  }
+});
+
 // Delete user
 router.delete("/users/:id", async (req, res) => {
   try {

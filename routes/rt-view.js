@@ -4,9 +4,9 @@ const UserViews = require("../models/UserViews");
 
 // POST /api/log-view
 router.post("/log-view", async (req, res) => {
-  const { email, topic, section } = req.body;
+  const { email, topic, subType, section } = req.body;
 
-  if (!email || !topic || !section) {
+  if (!email || !topic || !section || !subType) {
     return res.status(400).json({ message: "Missing data" });
   }
 
@@ -17,7 +17,7 @@ router.post("/log-view", async (req, res) => {
       user = new UserViews({ email, views: [] });
     }
 
-    user.views.push({ topic, section });
+    user.views.push({ topic, section, subType });
     await user.save();
 
     res.status(200).json({ message: "View logged successfully" });

@@ -14,6 +14,12 @@ const UserSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
   exercisePlan: [ExerciseWeekSchema],
   isSubscribed: { type: Boolean, default: false },
+  reviews: [
+    {
+      date: { type: Date, default: Date.now },
+      text: { type: String },
+    },
+  ],
 });
 
 module.exports = mongoose.model("User", UserSchema);
