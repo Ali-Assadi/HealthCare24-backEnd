@@ -22,6 +22,7 @@ router.post("/signup", async (req, res) => {
       height,
       weight,
       details,
+      visaCard: null,
     });
 
     await newUser.save();
@@ -298,6 +299,139 @@ router.post("/user/:email/review", async (req, res) => {
     res.status(200).json({ message: "Review saved successfully" });
   } catch (err) {
     res.status(500).json({ message: "Failed to save review", error: err });
+  }
+});
+
+// ✅ Get Visa card info for a user
+router.get("/user/:email/visa", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ visaCard: user.visaCard || null });
+  } catch (err) {
+    console.error("❌ Error fetching Visa card:", err);
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+// Save Visa card details for a user
+router.put("/user/:email/visa", async (req, res) => {
+  const { cardHolderName, last4Digits, expiryMonth, expiryYear } = req.body;
+
+  if (!cardHolderName || !last4Digits || !expiryMonth || !expiryYear) {
+    return res.status(400).json({ message: "Missing Visa card fields" });
+  }
+
+  try {
+    const updatedUser = await User.findOneAndUpdate(
+      { email: req.params.email },
+      {
+        visaCard: {
+          cardHolderName,
+          last4Digits,
+          expiryMonth,
+          expiryYear,
+          brand: "Visa",
+        },
+      },
+      { new: true }
+    );
+
+    if (!updatedUser)
+      return res.status(404).json({ message: "User not found" });
+
+    res
+      .status(200)
+      .json({ message: "Visa card saved", visaCard: updatedUser.visaCard });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to save visa card", error: err });
+  }
+});
+// Create Visa card for user (only if none exists)
+router.post("/user/:email/visa", async (req, res) => {
+  const { cardHolderName, last4Digits, expiryMonth, expiryYear } = req.body;
+
+  if (!cardHolderName || !last4Digits || !expiryMonth || !expiryYear) {
+    return res.status(400).json({ message: "Missing Visa card fields" });
+  }
+
+  try {
+    const user = await User.findOne({ email: req.params.email });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (user.visaCard) {
+      return res
+        .status(400)
+        .json({ message: "Visa card already exists. Use PUT to update." });
+    }
+
+    user.visaCard = {
+      cardHolderName,
+      last4Digits,
+      expiryMonth,
+      expiryYear,
+      brand: "Visa",
+    };
+    user.isSubscribed = true;
+    await user.save();
+
+    res.status(201).json({
+      message: "Visa card added successfully",
+      visaCard: user.visaCard,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to add visa card", error: err });
+  }
+});
+
+// Delete Visa card for a user
+router.delete("/user/:email/visa", async (req, res) => {
+  try {
+    const user = await User.findOne({ email: req.params.email });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.visaCard = null;
+    await user.save();
+
+    res.status(200).json({ message: "Visa card removed successfully" });
+  } catch (err) {
+    console.error("❌ Failed to remove visa card:", err);
+    res.status(500).json({ message: "Failed to remove visa card", error: err });
+  }
+});
+
+router.patch("/user/update-after-diet", async (req, res) => {
+  const { email, review, weight, details } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Add review
+    if (review && review.length > 3) {
+      user.reviews.push({ text: review });
+    }
+
+    // Update optional fields
+    if (weight) user.weight = weight;
+    if (details) user.details = details;
+
+    // ✅ Set flag
+    user.hasReviewedDiet = true;
+
+    await user.save();
+
+    res.json({ message: "Review saved and user updated" });
+  } catch (err) {
+    console.error("Error updating review:", err);
+    res.status(500).json({ message: "Server error", error: err });
   }
 });
 

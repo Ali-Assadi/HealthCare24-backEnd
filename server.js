@@ -21,6 +21,11 @@ const fitnessArticlesRoute = require("./routes/rt-fitnessArtciles");
 
 const app = express();
 
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -37,7 +42,7 @@ mongoose
 app.use("/api", authRoutes);
 app.use("/api", subscribeRoutes);
 app.use("/api", requestRoutes);
-app.use("/api", dietPlanRoutes);
+app.use("/api/dietplan", dietPlanRoutes);
 app.use("/api/exercise", exercisePlanRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/chat", chatRoutes);

@@ -1,0 +1,181 @@
+{
+  "goal": "gain",
+  "meals": {
+    "breakfast": {
+      "default": [
+        "Eggs + Toast + Banana",
+        "Oats + Milk + Honey",
+        "Avocado + Whole Grain Toast",
+        "Peanut Butter Pancakes + Syrup",
+        "Smoothie (Banana + Milk + Protein)"
+      ],
+      "noEgg": [
+        "Oats + Berries + Peanut Butter",
+        "Avocado Toast + Chia",
+        "Smoothie (Oats + Banana + Almond Milk)",
+        "Whole Grain Bagel + Nut Butter",
+        "Fruit Bowl + Toast + Honey"
+      ],
+      "noMilk": [
+        "Boiled Eggs + Toast + Banana",
+        "Peanut Butter Oats + Apple",
+        "Chia Pudding (water-based) + Granola",
+        "Avocado + Hummus Toast",
+        "Fruit Smoothie + Almond Butter"
+      ],
+      "noMeat": [
+        "Oatmeal + Banana + Peanut Butter",
+        "Greek Yogurt + Granola",
+        "Toast + Almond Butter + Jam",
+        "Smoothie (Oats + Fruit + Yogurt)",
+        "Chia Pudding + Berries"
+      ],
+      "vegetarian": [
+        "Avocado + Toast + Fruit",
+        "Smoothie (Banana + Peanut Butter + Oats)",
+        "Granola + Greek Yogurt",
+        "Whole Grain Muffin + Fruit",
+        "Chia Pudding + Almond Milk + Honey"
+      ],
+      "glutenFree": [
+        "Quinoa Porridge + Banana",
+        "Rice Cakes + Peanut Butter",
+        "Sweet Potato + Nut Butter",
+        "Chia Smoothie + Dates",
+        "Eggs + Baked Potato"
+      ]
+    },
+    "lunch": {
+      "default": [
+        "Grilled Chicken + Rice + Veggies",
+        "Beef Bowl + Quinoa + Hummus",
+        "Fish + Mashed Potatoes + Broccoli",
+        "Chicken Alfredo Pasta",
+        "Turkey Sandwich + Cheese + Salad"
+      ],
+      "noEgg": [
+        "Grilled Chicken + Rice + Avocado",
+        "Tofu Stir Fry + Quinoa",
+        "Steak + Mashed Potatoes",
+        "Rice Bowl + Beans + Salsa",
+        "Shawarma Plate + Veggies"
+      ],
+      "noMilk": [
+        "Rice + Grilled Chicken + Beans",
+        "Bulgur + Tuna Salad",
+        "Ground Beef Wrap + Hummus",
+        "Lentil Stew + Bread",
+        "Falafel Plate + Rice"
+      ],
+      "noMeat": [
+        "Tuna Salad + Sweet Potato",
+        "Chickpea Bowl + Couscous",
+        "Pasta + Roasted Veggies",
+        "Falafel + Hummus + Pita",
+        "Grilled Cheese + Tomato Soup"
+      ],
+      "vegetarian": [
+        "Tofu Stir Fry + Noodles",
+        "Lentil Soup + Rice",
+        "Falafel Bowl + Tahini",
+        "Grilled Eggplant + Couscous",
+        "Stuffed Peppers + Rice"
+      ],
+      "glutenFree": [
+        "Quinoa + Chicken + Broccoli",
+        "Sweet Potato Bowl + Tofu",
+        "Rice Noodles + Peanut Sauce",
+        "Grilled Fish + Veggies",
+        "Stuffed Bell Peppers"
+      ]
+    },
+    "dinner": {
+      "default": [
+        "Steak + Baked Potato + Spinach",
+        "Grilled Chicken + Couscous + Veggies",
+        "Salmon + Sweet Potato + Greens",
+        "Ground Beef + Pasta + Sauce",
+        "Chicken Burrito Bowl + Guac"
+      ],
+      "noEgg": [
+        "Grilled Fish + Rice + Beans",
+        "Beef Stir Fry + Veggies",
+        "Baked Chicken + Potatoes",
+        "Lamb + Couscous",
+        "Burgers (no egg) + Buns + Salad"
+      ],
+      "noMilk": [
+        "Grilled Chicken + Quinoa",
+        "Tuna + Sweet Potato + Salad",
+        "Shrimp Stir Fry + Noodles",
+        "Rice Bowl + Roasted Veggies",
+        "Stuffed Eggplant + Rice"
+      ],
+      "noMeat": [
+        "Fish + Couscous + Avocado",
+        "Tofu Bowl + Stir Fried Rice",
+        "Veggie Lasagna",
+        "Chickpea Curry + Rice",
+        "Grilled Halloumi + Couscous"
+      ],
+      "vegetarian": [
+        "Chickpea + Sweet Potato Bowl",
+        "Grilled Paneer + Rice",
+        "Tofu Stir Fry + Noodles",
+        "Veggie Stew + Quinoa",
+        "Zucchini Boats + Lentils"
+      ],
+      "glutenFree": [
+        "Grilled Chicken + Sweet Potato",
+        "Baked Salmon + Asparagus",
+        "Rice Bowl + Beans + Salsa",
+        "Stuffed Zucchini",
+        "Eggplant + Lentils"
+      ]
+    },
+    "snack": {
+      "default": [
+        "Protein Bar",
+        "Yogurt + Granola",
+        "Boiled Egg + Banana",
+        "Peanut Butter + Rice Cake",
+        "Fruit Smoothie"
+      ],
+      "noEgg": [
+        "Fruit + Almond Butter",
+        "Trail Mix",
+        "Granola Bar + Banana",
+        "Peanut Butter + Apple",
+        "Chia Pudding"
+      ],
+      "noMilk": [
+        "Dates + Nuts",
+        "Fruit Salad + Honey",
+        "Peanut Butter Rice Cakes",
+        "Carrot Sticks + Hummus",
+        "Boiled Potatoes + Spices"
+      ],
+      "noMeat": [
+        "Yogurt + Oats",
+        "Smoothie + Peanut Butter",
+        "Oat Balls + Banana",
+        "Granola Bar + Almond Milk",
+        "Banana + Nut Butter"
+      ],
+      "vegetarian": [
+        "Nut Mix + Dried Fruit",
+        "Smoothie Bowl",
+        "Greek Yogurt + Berries",
+        "Protein Shake",
+        "Energy Balls + Chia"
+      ],
+      "glutenFree": [
+        "Almonds + Dates",
+        "Rice Cakes + Nut Butter",
+        "Fruit + Honey",
+        "Trail Mix + Dark Chocolate",
+        "Boiled Egg + Sweet Potato"
+      ]
+    }
+  }
+}

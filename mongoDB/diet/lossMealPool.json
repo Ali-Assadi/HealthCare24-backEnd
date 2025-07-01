@@ -1,0 +1,181 @@
+{
+  "goal": "loss",
+  "meals": {
+    "breakfast": {
+      "default": [
+        "Oatmeal + Berries",
+        "Smoothie (Spinach + Banana + Water)",
+        "Boiled Egg + Whole Grain Toast",
+        "Avocado Toast + Tomato",
+        "Chia Pudding + Almond Milk"
+      ],
+      "noEgg": [
+        "Oats + Chia + Berries",
+        "Banana + Peanut Butter",
+        "Avocado + Whole Grain Toast",
+        "Fruit Smoothie + Water",
+        "Quinoa Porridge + Cinnamon"
+      ],
+      "noMilk": [
+        "Chia Seeds + Fruit Bowl",
+        "Boiled Egg + Toast",
+        "Smoothie (Almond Milk + Spinach)",
+        "Oats + Peanut Butter + Banana",
+        "Apple Slices + Almond Butter"
+      ],
+      "noMeat": [
+        "Oatmeal + Fruit",
+        "Chia Pudding + Berries",
+        "Toast + Hummus + Veggies",
+        "Rice Cakes + Peanut Butter",
+        "Smoothie + Granola"
+      ],
+      "vegetarian": [
+        "Chia Bowl + Banana",
+        "Oats + Yogurt + Honey",
+        "Granola + Almond Milk",
+        "Avocado Toast + Berries",
+        "Fruit Salad + Almonds"
+      ],
+      "glutenFree": [
+        "Quinoa Porridge + Berries",
+        "Smoothie + Peanut Butter",
+        "Chia Pudding + Banana",
+        "Boiled Egg + Sweet Potato",
+        "Rice Cakes + Almond Butter"
+      ]
+    },
+    "lunch": {
+      "default": [
+        "Grilled Chicken + Veggies",
+        "Quinoa Bowl + Spinach",
+        "Tuna Wrap + Greens",
+        "Turkey + Sweet Potato + Broccoli",
+        "Lentil Soup + Salad"
+      ],
+      "noEgg": [
+        "Grilled Chicken Salad",
+        "Tofu Bowl + Cucumber",
+        "Chickpea Wrap + Hummus",
+        "Grilled Fish + Veggies",
+        "Zoodle Bowl + Sauce"
+      ],
+      "noMilk": [
+        "Chicken Wrap + Avocado",
+        "Vegetable Soup + Rice",
+        "Lentils + Sweet Potato",
+        "Tuna Bowl + Cucumber",
+        "Stir Fry + Quinoa"
+      ],
+      "noMeat": [
+        "Chickpea Salad + Hummus",
+        "Tofu Stir Fry + Rice",
+        "Egg + Zucchini Bowl",
+        "Falafel + Quinoa",
+        "Vegetable Stew + Couscous"
+      ],
+      "vegetarian": [
+        "Lentil Bowl + Greens",
+        "Tofu Wrap + Spinach",
+        "Stuffed Peppers + Veg",
+        "Rice Bowl + Hummus",
+        "Eggplant + Beans"
+      ],
+      "glutenFree": [
+        "Chicken + Sweet Potato",
+        "Zucchini Noodles + Pesto",
+        "Quinoa + Grilled Veg",
+        "Rice + Tuna Salad",
+        "Stuffed Bell Peppers"
+      ]
+    },
+    "dinner": {
+      "default": [
+        "Baked Salmon + Broccoli",
+        "Stir Fry + Brown Rice",
+        "Grilled Chicken + Zucchini",
+        "Shrimp Bowl + Veggies",
+        "Tofu + Quinoa"
+      ],
+      "noEgg": [
+        "Fish + Greens",
+        "Stir Fry + Rice Noodles",
+        "Turkey Lettuce Wraps",
+        "Tofu Bowl + Avocado",
+        "Stuffed Peppers"
+      ],
+      "noMilk": [
+        "Shrimp + Veggie Stir Fry",
+        "Quinoa + Lentils",
+        "Chicken Zoodle Soup",
+        "Baked Fish + Tomato Salad",
+        "Eggplant Stir Fry + Rice"
+      ],
+      "noMeat": [
+        "Tofu Curry + Broccoli",
+        "Zucchini Noodles + Veggies",
+        "Lentil Soup + Salad",
+        "Stuffed Eggplant",
+        "Vegetable Stew + Rice"
+      ],
+      "vegetarian": [
+        "Grilled Veggie Bowl",
+        "Tofu + Quinoa",
+        "Spinach + Chickpeas",
+        "Zoodle Pasta + Pesto",
+        "Cabbage Wraps + Lentils"
+      ],
+      "glutenFree": [
+        "Grilled Chicken + Sweet Potato",
+        "Zoodles + Ground Turkey",
+        "Fish + Steamed Veg",
+        "Cauliflower Rice + Beans",
+        "Stuffed Zucchini Boats"
+      ]
+    },
+    "snack": {
+      "default": [
+        "Carrot Sticks + Hummus",
+        "Boiled Egg + Cucumber",
+        "Fruit Cup",
+        "Yogurt + Berries",
+        "Rice Cake + Peanut Butter"
+      ],
+      "noEgg": [
+        "Chia Pudding + Fruit",
+        "Trail Mix",
+        "Fruit Smoothie",
+        "Nut Butter + Banana",
+        "Rice Cake + Jam"
+      ],
+      "noMilk": [
+        "Mixed Nuts",
+        "Apple + Peanut Butter",
+        "Hummus + Veggies",
+        "Fruit Salad",
+        "Boiled Chickpeas"
+      ],
+      "noMeat": [
+        "Greek Yogurt + Granola",
+        "Chia Bowl + Fruit",
+        "Rice Cakes + Avocado",
+        "Fruit Cup + Nuts",
+        "Peanut Butter Spoon"
+      ],
+      "vegetarian": [
+        "Smoothie Bowl",
+        "Boiled Egg + Veggies",
+        "Energy Bites + Honey",
+        "Chia Pudding",
+        "Fruit + Almonds"
+      ],
+      "glutenFree": [
+        "Rice Cake + Nut Butter",
+        "Fruit + Chia Seeds",
+        "Cucumber Slices + Hummus",
+        "Apple + Almond Butter",
+        "Dates + Mixed Nuts"
+      ]
+    }
+  }
+}
