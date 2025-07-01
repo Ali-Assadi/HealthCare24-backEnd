@@ -1,7 +1,20 @@
 const mongoose = require("mongoose");
-const ExerciseWeekSchema = require("./exercisePlan");
 
-// 🟢 Define DietPlan sub-schema
+// 🏋️ Exercise embedded schema
+const ExerciseDaySchema = new mongoose.Schema({
+  day: { type: Number, required: true },
+  type: { type: String, required: true },
+  workout: { type: String, required: true },
+  restriction: { type: String, default: "default" },
+  finished: { type: Boolean, default: false },
+});
+
+const ExerciseWeekSchema = new mongoose.Schema({
+  week: { type: Number, required: true },
+  days: [ExerciseDaySchema],
+});
+
+// 🟢 DietPlan sub-schema
 const DaySchema = new mongoose.Schema(
   {
     breakfast: { type: String },
@@ -41,7 +54,6 @@ const UserSchema = new mongoose.Schema({
   weight: Number,
   details: { type: String, default: "" },
 
-  // 🍽️ Structured diet plan
   dietPlan: {
     type: [WeekSchema],
     default: [],
@@ -51,8 +63,10 @@ const UserSchema = new mongoose.Schema({
   mustUpdatePassword: { type: Boolean, default: false },
   isAdmin: { type: Boolean, default: false },
 
-  // 🏋️‍♂️ Exercise plan (already typed)
-  exercisePlan: [ExerciseWeekSchema],
+  exercisePlan: {
+    type: [ExerciseWeekSchema],
+    default: [],
+  },
 
   isSubscribed: { type: Boolean, default: false },
   visaCard: VisaCardSchema,

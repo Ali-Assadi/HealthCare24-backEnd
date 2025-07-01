@@ -1,15 +1,20 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const ExerciseDaySchema = new mongoose.Schema({
-  day: { type: Number, required: true },
-  type: { type: String, required: true },
-  workout: { type: String, required: true },
-  finished: { type: Boolean, default: false } // ✅ ADD this field
+const restrictionGroupSchema = new mongoose.Schema(
+  {
+    default: [String],
+    noLegs: [String],
+    noBack: [String],
+    noPush: [String],
+    noPull: [String],
+    noWeights: [String],
+  },
+  { _id: false }
+);
+
+const ExercisePlanSchema = new mongoose.Schema({
+  goal: { type: String, required: true },
+  plan: restrictionGroupSchema,
 });
 
-const ExerciseWeekSchema = new mongoose.Schema({
-  week: { type: Number, required: true },
-  days: [ExerciseDaySchema]
-});
-
-module.exports = ExerciseWeekSchema;
+module.exports = mongoose.model("ExercisePlan", ExercisePlanSchema);

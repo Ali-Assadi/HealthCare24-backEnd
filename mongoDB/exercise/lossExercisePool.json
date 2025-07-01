@@ -1,0 +1,59 @@
+{
+  "loss": {
+    "default": [
+      "Jump Rope Intervals",
+      "Burpees",
+      "Mountain Climbers",
+      "High Knees",
+      "Cycling (Stationary or Outdoor)",
+      "Running Intervals",
+      "Jumping Jacks",
+      "Bodyweight HIIT Circuit",
+      "Box Step-ups",
+      "Shadow Boxing"
+    ],
+    "noLegs": [
+      "Seated Arm Circles",
+      "Shadow Boxing (Upper Body)",
+      "Seated Resistance Band Rows",
+      "Seated Dumbbell Press",
+      "Wall Push-ups"
+    ],
+    "noBack": [
+      "Stationary Bike (Upright Posture)",
+      "Marching in Place",
+      "Bodyweight Step-ups",
+      "Lunges with Support",
+      "Knee Push-ups"
+    ],
+    "noWeights": [
+      "Jumping Jacks",
+      "Mountain Climbers",
+      "Burpees",
+      "Running in Place",
+      "Skater Steps",
+      "High Knees",
+      "Step Jumps",
+      "Plank to Push-up",
+      "Bodyweight Squats",
+      "Tuck Jumps"
+    ],
+    "noPush": [
+      "Jogging or Running",
+      "High Knees",
+      "Jump Rope",
+      "Jumping Jacks",
+      "Cycling",
+      "Box Jumps",
+      "Wall Sits"
+    ],
+    "noPull": [
+      "Burpees",
+      "Bodyweight Squats",
+      "High Knees",
+      "Jumping Jacks",
+      "Mountain Climbers",
+      "Running Intervals"
+    ]
+  }
+}

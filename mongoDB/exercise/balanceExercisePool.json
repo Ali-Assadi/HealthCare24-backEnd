@@ -1,0 +1,54 @@
+{
+  "balance": {
+    "default": [
+      "Yoga Flow (Full Body)",
+      "Pilates Core Routine",
+      "Bodyweight Circuit (Push-ups, Squats, Plank)",
+      "Resistance Band Rows",
+      "Walking Lunges",
+      "Plank Variations",
+      "Stability Ball Workouts",
+      "Jump Rope Intervals"
+    ],
+    "noLegs": [
+      "Seated Shoulder Press",
+      "Resistance Band Bicep Curls",
+      "Wall Push-ups",
+      "Dumbbell Chest Flys (Flat Bench)",
+      "Seated Rows"
+    ],
+    "noBack": [
+      "Standing Shoulder Press",
+      "Forward Lunges",
+      "Goblet Squats",
+      "Bodyweight Step-ups",
+      "Wall Sits"
+    ],
+    "noWeights": [
+      "Yoga Sun Salutations",
+      "Pilates Bridge Series",
+      "Bird-Dog",
+      "Wall Sits",
+      "Side Plank",
+      "High Knees",
+      "Bodyweight Squats",
+      "Superman Hold",
+      "Mountain Climbers",
+      "Side-Lying Leg Raises"
+    ],
+    "noPush": [
+      "Resistance Band Rows",
+      "Bodyweight Squats",
+      "Side Plank with Leg Raise",
+      "Wall Sits",
+      "Step-ups"
+    ],
+    "noPull": [
+      "Yoga Poses (Tree, Warrior)",
+      "Push-ups",
+      "Lunges",
+      "Overhead Shoulder Press",
+      "Calf Raises"
+    ]
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "gain": {
+    "default": [
+      "Barbell Squats",
+      "Deadlifts",
+      "Bench Press",
+      "Pull-ups",
+      "Overhead Press",
+      "Dumbbell Rows",
+      "Lunges",
+      "Leg Press"
+    ],
+    "noLegs": [
+      "Incline Dumbbell Press",
+      "Seated Cable Rows",
+      "Lat Pulldown",
+      "Chest Press Machine",
+      "Bicep Curls (Seated)"
+    ],
+    "noBack": [
+      "Barbell Squats",
+      "Leg Press",
+      "Seated Chest Press",
+      "Leg Extensions",
+      "Calf Raises"
+    ],
+    "noWeights": [
+      "Push-ups (Standard)",
+      "Push-ups (Diamond)",
+      "Bodyweight Squats",
+      "Lunges (Bodyweight)",
+      "Pull-ups (or Assisted)",
+      "Plank to Push-up",
+      "Wall Sits",
+      "Glute Bridges",
+      "Superman Hold",
+      "Leg Raises"
+    ],
+    "noPush": [
+      "Deadlifts",
+      "Pull-ups",
+      "Dumbbell Rows",
+      "Barbell Curls",
+      "Rear Delt Flys"
+    ],
+    "noPull": [
+      "Push-ups",
+      "Bench Press",
+      "Overhead Press",
+      "Tricep Dips",
+      "Chest Fly"
+    ]
+  }
+}
