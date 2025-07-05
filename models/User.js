@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const ExerciseDaySchema = new mongoose.Schema({
   day: { type: Number, required: true },
   type: { type: String, required: true },
-  workout: { type: String, required: true },
+  workout: { type: [String], required: true },
   restriction: { type: String, default: "default" },
   finished: { type: Boolean, default: false },
 });
@@ -72,7 +72,15 @@ const UserSchema = new mongoose.Schema({
   visaCard: VisaCardSchema,
 
   hasReviewedDiet: { type: Boolean, default: false },
-  reviews: [
+  dietReviews: [
+    {
+      date: { type: Date, default: Date.now },
+      text: { type: String },
+    },
+  ],
+
+  hasReviewedExercise: { type: Boolean, default: false },
+  exerciseReviews: [
     {
       date: { type: Date, default: Date.now },
       text: { type: String },

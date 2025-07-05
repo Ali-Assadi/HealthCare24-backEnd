@@ -1,59 +1,59 @@
 {
   "loss": {
     "default": [
-      "Jump Rope Intervals",
-      "Burpees",
-      "Mountain Climbers",
-      "High Knees",
-      "Cycling (Stationary or Outdoor)",
-      "Running Intervals",
-      "Jumping Jacks",
-      "Bodyweight HIIT Circuit",
-      "Box Step-ups",
-      "Shadow Boxing"
+      "Jump Rope Intervals - 4 sets x 1 min",
+      "Burpees - 4 sets x 12 reps",
+      "Mountain Climbers - 4 sets x 30 sec",
+      "High Knees - 4 sets x 30 sec",
+      "Cycling (Stationary or Outdoor) - 20-30 min",
+      "Running Intervals - 4 sets x 2 min run / 1 min walk",
+      "Jumping Jacks - 4 sets x 40 reps",
+      "Bodyweight HIIT Circuit - 3 rounds x 5 exercises",
+      "Box Step-ups - 3 sets x 12 reps each leg",
+      "Shadow Boxing - 3 sets x 1 min"
     ],
     "noLegs": [
-      "Seated Arm Circles",
-      "Shadow Boxing (Upper Body)",
-      "Seated Resistance Band Rows",
-      "Seated Dumbbell Press",
-      "Wall Push-ups"
+      "Seated Arm Circles - 4 sets x 30 sec",
+      "Shadow Boxing (Upper Body) - 4 sets x 1 min",
+      "Seated Resistance Band Rows - 3 sets x 15 reps",
+      "Seated Dumbbell Press - 3 sets x 12 reps",
+      "Wall Push-ups - 3 sets x 15 reps"
     ],
     "noBack": [
-      "Stationary Bike (Upright Posture)",
-      "Marching in Place",
-      "Bodyweight Step-ups",
-      "Lunges with Support",
-      "Knee Push-ups"
+      "Stationary Bike (Upright Posture) - 20 min",
+      "Marching in Place - 4 sets x 1 min",
+      "Bodyweight Step-ups - 3 sets x 12 reps",
+      "Lunges with Support - 3 sets x 10 reps each leg",
+      "Knee Push-ups - 3 sets x 12 reps"
     ],
     "noWeights": [
-      "Jumping Jacks",
-      "Mountain Climbers",
-      "Burpees",
-      "Running in Place",
-      "Skater Steps",
-      "High Knees",
-      "Step Jumps",
-      "Plank to Push-up",
-      "Bodyweight Squats",
-      "Tuck Jumps"
+      "Jumping Jacks - 4 sets x 40 reps",
+      "Mountain Climbers - 4 sets x 30 sec",
+      "Burpees - 4 sets x 12 reps",
+      "Running in Place - 3 sets x 1 min",
+      "Skater Steps - 3 sets x 20 reps",
+      "High Knees - 4 sets x 30 sec",
+      "Step Jumps - 3 sets x 10 reps",
+      "Plank to Push-up - 3 sets x 12 reps",
+      "Bodyweight Squats - 3 sets x 20 reps",
+      "Tuck Jumps - 3 sets x 10 reps"
     ],
     "noPush": [
-      "Jogging or Running",
-      "High Knees",
-      "Jump Rope",
-      "Jumping Jacks",
-      "Cycling",
-      "Box Jumps",
-      "Wall Sits"
+      "Jogging or Running - 20 min",
+      "High Knees - 4 sets x 30 sec",
+      "Jump Rope - 4 sets x 1 min",
+      "Jumping Jacks - 4 sets x 40 reps",
+      "Cycling - 20-30 min",
+      "Box Jumps - 3 sets x 10 reps",
+      "Wall Sits - 3 sets x 45 sec"
     ],
     "noPull": [
-      "Burpees",
-      "Bodyweight Squats",
-      "High Knees",
-      "Jumping Jacks",
-      "Mountain Climbers",
-      "Running Intervals"
+      "Burpees - 4 sets x 12 reps",
+      "Bodyweight Squats - 3 sets x 20 reps",
+      "High Knees - 4 sets x 30 sec",
+      "Jumping Jacks - 4 sets x 40 reps",
+      "Mountain Climbers - 4 sets x 30 sec",
+      "Running Intervals - 4 sets x 2 min run / 1 min walk"
     ]
   }
 }

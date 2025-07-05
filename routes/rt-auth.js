@@ -284,21 +284,49 @@ router.put("/user/:email/diet", async (req, res) => {
   }
 });
 
-//review
 router.post("/user/:email/review", async (req, res) => {
   const { email } = req.params;
-  const { text } = req.body;
+  const { text, type } = req.body; // type = 'diet' or 'exercise'
 
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    user.reviews.push({ text });
-    await user.save();
+    const review = { text, date: new Date() };
 
+    if (type === "diet") {
+      user.dietReviews.push(review);
+      user.hasReviewedDiet = true;
+    } else if (type === "exercise") {
+      user.exerciseReviews.push(review);
+      user.hasReviewedExercise = true;
+    } else {
+      return res.status(400).json({ message: "Invalid review type" });
+    }
+
+    await user.save();
     res.status(200).json({ message: "Review saved successfully" });
   } catch (err) {
     res.status(500).json({ message: "Failed to save review", error: err });
+  }
+});
+
+router.get("/user/:email/reviews", async (req, res) => {
+  const { email } = req.params;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Fallbacks in case fields are missing in DB
+    const dietReviews = Array.isArray(user.dietReviews) ? user.dietReviews : [];
+    const exerciseReviews = Array.isArray(user.exerciseReviews)
+      ? user.exerciseReviews
+      : [];
+
+    res.json({ dietReviews, exerciseReviews });
+  } catch (err) {
+    console.error("Review fetch error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 });
 
@@ -414,20 +442,15 @@ router.patch("/user/update-after-diet", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Add review
     if (review && review.length > 3) {
-      user.reviews.push({ text: review });
+      user.dietReviews.push({ text: review, date: new Date() });
+      user.hasReviewedDiet = true;
     }
 
-    // Update optional fields
     if (weight) user.weight = weight;
     if (details) user.details = details;
 
-    // ✅ Set flag
-    user.hasReviewedDiet = true;
-
     await user.save();
-
     res.json({ message: "Review saved and user updated" });
   } catch (err) {
     console.error("Error updating review:", err);

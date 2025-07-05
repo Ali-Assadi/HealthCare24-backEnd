@@ -3,178 +3,178 @@
   "meals": {
     "breakfast": {
       "default": [
-        "Oatmeal + Berries",
-        "Smoothie (Spinach + Banana + Water)",
-        "Boiled Egg + Whole Grain Toast",
-        "Avocado Toast + Tomato",
-        "Chia Pudding + Almond Milk"
+        "Oatmeal 40g + Berries 80g (cal 250)",
+        "Smoothie (Spinach 50g + Banana 100g + Water 200ml) (cal 180)",
+        "Boiled Egg 60g + Whole Grain Toast 60g (cal 200)",
+        "Avocado 50g Toast + Tomato 50g (cal 220)",
+        "Chia Pudding 30g + Almond Milk 150ml (cal 210)"
       ],
       "noEgg": [
-        "Oats + Chia + Berries",
-        "Banana + Peanut Butter",
-        "Avocado + Whole Grain Toast",
-        "Fruit Smoothie + Water",
-        "Quinoa Porridge + Cinnamon"
+        "Oats 40g + Chia 10g + Berries 80g (cal 240)",
+        "Banana 100g + Peanut Butter 15g (cal 210)",
+        "Avocado 60g + Whole Grain Toast 60g (cal 220)",
+        "Fruit Smoothie 250ml + Water (cal 180)",
+        "Quinoa Porridge 40g + Cinnamon 2g (cal 190)"
       ],
       "noMilk": [
-        "Chia Seeds + Fruit Bowl",
-        "Boiled Egg + Toast",
-        "Smoothie (Almond Milk + Spinach)",
-        "Oats + Peanut Butter + Banana",
-        "Apple Slices + Almond Butter"
+        "Chia Seeds 30g + Fruit Bowl 100g (cal 230)",
+        "Boiled Egg 60g + Toast 60g (cal 200)",
+        "Smoothie (Almond Milk 150ml + Spinach 50g) (cal 170)",
+        "Oats 40g + Peanut Butter 10g + Banana 100g (cal 250)",
+        "Apple Slices 100g + Almond Butter 15g (cal 200)"
       ],
       "noMeat": [
-        "Oatmeal + Fruit",
-        "Chia Pudding + Berries",
-        "Toast + Hummus + Veggies",
-        "Rice Cakes + Peanut Butter",
-        "Smoothie + Granola"
+        "Oatmeal 40g + Fruit 100g (cal 230)",
+        "Chia Pudding 30g + Berries 80g (cal 220)",
+        "Toast 60g + Hummus 30g + Veggies 50g (cal 210)",
+        "Rice Cakes 2x + Peanut Butter 10g (cal 200)",
+        "Smoothie 250ml + Granola 30g (cal 240)"
       ],
       "vegetarian": [
-        "Chia Bowl + Banana",
-        "Oats + Yogurt + Honey",
-        "Granola + Almond Milk",
-        "Avocado Toast + Berries",
-        "Fruit Salad + Almonds"
+        "Chia Bowl 30g + Banana 100g (cal 220)",
+        "Oats 40g + Yogurt 100g + Honey 10g (cal 250)",
+        "Granola 30g + Almond Milk 150ml (cal 230)",
+        "Avocado 50g Toast + Berries 80g (cal 240)",
+        "Fruit Salad 120g + Almonds 20g (cal 250)"
       ],
       "glutenFree": [
-        "Quinoa Porridge + Berries",
-        "Smoothie + Peanut Butter",
-        "Chia Pudding + Banana",
-        "Boiled Egg + Sweet Potato",
-        "Rice Cakes + Almond Butter"
+        "Quinoa Porridge 40g + Berries 80g (cal 230)",
+        "Smoothie 250ml + Peanut Butter 10g (cal 240)",
+        "Chia Pudding 30g + Banana 100g (cal 220)",
+        "Boiled Egg 60g + Sweet Potato 100g (cal 230)",
+        "Rice Cakes 2x + Almond Butter 10g (cal 210)"
       ]
     },
     "lunch": {
       "default": [
-        "Grilled Chicken + Veggies",
-        "Quinoa Bowl + Spinach",
-        "Tuna Wrap + Greens",
-        "Turkey + Sweet Potato + Broccoli",
-        "Lentil Soup + Salad"
+        "Grilled Chicken 100g + Veggies 100g (cal 300)",
+        "Quinoa Bowl 100g + Spinach 50g (cal 280)",
+        "Tuna Wrap 120g + Greens 50g (cal 320)",
+        "Turkey 100g + Sweet Potato 100g + Broccoli 80g (cal 330)",
+        "Lentil Soup 200ml + Salad 100g (cal 290)"
       ],
       "noEgg": [
-        "Grilled Chicken Salad",
-        "Tofu Bowl + Cucumber",
-        "Chickpea Wrap + Hummus",
-        "Grilled Fish + Veggies",
-        "Zoodle Bowl + Sauce"
+        "Grilled Chicken 100g Salad + Veggies 100g (cal 280)",
+        "Tofu Bowl 150g + Cucumber 50g (cal 270)",
+        "Chickpea Wrap 100g + Hummus 30g (cal 290)",
+        "Grilled Fish 120g + Veggies 100g (cal 300)",
+        "Zoodle Bowl 150g + Sauce 30g (cal 280)"
       ],
       "noMilk": [
-        "Chicken Wrap + Avocado",
-        "Vegetable Soup + Rice",
-        "Lentils + Sweet Potato",
-        "Tuna Bowl + Cucumber",
-        "Stir Fry + Quinoa"
+        "Chicken Wrap 120g + Avocado 50g (cal 310)",
+        "Vegetable Soup 200ml + Rice 100g (cal 290)",
+        "Lentils 150g + Sweet Potato 100g (cal 300)",
+        "Tuna Bowl 100g + Cucumber 50g (cal 280)",
+        "Stir Fry 150g + Quinoa 100g (cal 310)"
       ],
       "noMeat": [
-        "Chickpea Salad + Hummus",
-        "Tofu Stir Fry + Rice",
-        "Egg + Zucchini Bowl",
-        "Falafel + Quinoa",
-        "Vegetable Stew + Couscous"
+        "Chickpea Salad 100g + Hummus 30g (cal 260)",
+        "Tofu Stir Fry 150g + Rice 100g (cal 280)",
+        "Egg 60g + Zucchini Bowl 100g (cal 240)",
+        "Falafel 100g + Quinoa 100g (cal 280)",
+        "Vegetable Stew 200g + Couscous 100g (cal 270)"
       ],
       "vegetarian": [
-        "Lentil Bowl + Greens",
-        "Tofu Wrap + Spinach",
-        "Stuffed Peppers + Veg",
-        "Rice Bowl + Hummus",
-        "Eggplant + Beans"
+        "Lentil Bowl 150g + Greens 50g (cal 270)",
+        "Tofu Wrap 120g + Spinach 50g (cal 280)",
+        "Stuffed Peppers 150g + Veg 80g (cal 290)",
+        "Rice Bowl 150g + Hummus 30g (cal 280)",
+        "Eggplant 100g + Beans 100g (cal 260)"
       ],
       "glutenFree": [
-        "Chicken + Sweet Potato",
-        "Zucchini Noodles + Pesto",
-        "Quinoa + Grilled Veg",
-        "Rice + Tuna Salad",
-        "Stuffed Bell Peppers"
+        "Chicken 100g + Sweet Potato 100g (cal 300)",
+        "Zucchini Noodles 100g + Pesto 30g (cal 270)",
+        "Quinoa 100g + Grilled Veg 100g (cal 280)",
+        "Rice 100g + Tuna Salad 80g (cal 290)",
+        "Stuffed Bell Peppers 150g (cal 280)"
       ]
     },
     "dinner": {
       "default": [
-        "Baked Salmon + Broccoli",
-        "Stir Fry + Brown Rice",
-        "Grilled Chicken + Zucchini",
-        "Shrimp Bowl + Veggies",
-        "Tofu + Quinoa"
+        "Baked Salmon 120g + Broccoli 100g (cal 310)",
+        "Stir Fry 150g + Brown Rice 100g (cal 330)",
+        "Grilled Chicken 100g + Zucchini 100g (cal 300)",
+        "Shrimp Bowl 150g + Veggies 100g (cal 320)",
+        "Tofu 150g + Quinoa 100g (cal 310)"
       ],
       "noEgg": [
-        "Fish + Greens",
-        "Stir Fry + Rice Noodles",
-        "Turkey Lettuce Wraps",
-        "Tofu Bowl + Avocado",
-        "Stuffed Peppers"
+        "Fish 120g + Greens 100g (cal 290)",
+        "Stir Fry 150g + Rice Noodles 100g (cal 310)",
+        "Turkey Lettuce Wraps 120g (cal 280)",
+        "Tofu Bowl 150g + Avocado 50g (cal 310)",
+        "Stuffed Peppers 150g (cal 300)"
       ],
       "noMilk": [
-        "Shrimp + Veggie Stir Fry",
-        "Quinoa + Lentils",
-        "Chicken Zoodle Soup",
-        "Baked Fish + Tomato Salad",
-        "Eggplant Stir Fry + Rice"
+        "Shrimp 120g + Veggie Stir Fry 100g (cal 310)",
+        "Quinoa 100g + Lentils 100g (cal 290)",
+        "Chicken Zoodle Soup 250ml (cal 280)",
+        "Baked Fish 120g + Tomato Salad 100g (cal 300)",
+        "Eggplant Stir Fry 150g + Rice 100g (cal 310)"
       ],
       "noMeat": [
-        "Tofu Curry + Broccoli",
-        "Zucchini Noodles + Veggies",
-        "Lentil Soup + Salad",
-        "Stuffed Eggplant",
-        "Vegetable Stew + Rice"
+        "Tofu Curry 150g + Broccoli 100g (cal 300)",
+        "Zucchini Noodles 150g + Veggies 100g (cal 280)",
+        "Lentil Soup 200ml + Salad 100g (cal 260)",
+        "Stuffed Eggplant 150g (cal 270)",
+        "Vegetable Stew 200g + Rice 100g (cal 280)"
       ],
       "vegetarian": [
-        "Grilled Veggie Bowl",
-        "Tofu + Quinoa",
-        "Spinach + Chickpeas",
-        "Zoodle Pasta + Pesto",
-        "Cabbage Wraps + Lentils"
+        "Grilled Veggie Bowl 200g (cal 270)",
+        "Tofu 150g + Quinoa 100g (cal 310)",
+        "Spinach 100g + Chickpeas 100g (cal 260)",
+        "Zoodle Pasta 150g + Pesto 30g (cal 290)",
+        "Cabbage Wraps 150g + Lentils 100g (cal 280)"
       ],
       "glutenFree": [
-        "Grilled Chicken + Sweet Potato",
-        "Zoodles + Ground Turkey",
-        "Fish + Steamed Veg",
-        "Cauliflower Rice + Beans",
-        "Stuffed Zucchini Boats"
+        "Grilled Chicken 100g + Sweet Potato 100g (cal 300)",
+        "Zoodles 150g + Ground Turkey 100g (cal 310)",
+        "Fish 120g + Steamed Veg 100g (cal 290)",
+        "Cauliflower Rice 150g + Beans 100g (cal 270)",
+        "Stuffed Zucchini Boats 150g (cal 280)"
       ]
     },
     "snack": {
       "default": [
-        "Carrot Sticks + Hummus",
-        "Boiled Egg + Cucumber",
-        "Fruit Cup",
-        "Yogurt + Berries",
-        "Rice Cake + Peanut Butter"
+        "Carrot Sticks 100g + Hummus 30g (cal 150)",
+        "Boiled Egg 60g + Cucumber 100g (cal 130)",
+        "Fruit Cup 150g (cal 120)",
+        "Yogurt 100g + Berries 50g (cal 160)",
+        "Rice Cake 1x + Peanut Butter 10g (cal 140)"
       ],
       "noEgg": [
-        "Chia Pudding + Fruit",
-        "Trail Mix",
-        "Fruit Smoothie",
-        "Nut Butter + Banana",
-        "Rice Cake + Jam"
+        "Chia Pudding 30g + Fruit 100g (cal 150)",
+        "Trail Mix 30g (cal 170)",
+        "Fruit Smoothie 200ml (cal 160)",
+        "Nut Butter 10g + Banana 100g (cal 140)",
+        "Rice Cake 1x + Jam 10g (cal 130)"
       ],
       "noMilk": [
-        "Mixed Nuts",
-        "Apple + Peanut Butter",
-        "Hummus + Veggies",
-        "Fruit Salad",
-        "Boiled Chickpeas"
+        "Mixed Nuts 30g (cal 170)",
+        "Apple 100g + Peanut Butter 10g (cal 150)",
+        "Hummus 30g + Veggies 100g (cal 140)",
+        "Fruit Salad 150g (cal 120)",
+        "Boiled Chickpeas 100g (cal 130)"
       ],
       "noMeat": [
-        "Greek Yogurt + Granola",
-        "Chia Bowl + Fruit",
-        "Rice Cakes + Avocado",
-        "Fruit Cup + Nuts",
-        "Peanut Butter Spoon"
+        "Greek Yogurt 100g + Granola 30g (cal 160)",
+        "Chia Bowl 30g + Fruit 100g (cal 150)",
+        "Rice Cakes 2x + Avocado 50g (cal 140)",
+        "Fruit Cup 150g + Nuts 20g (cal 160)",
+        "Peanut Butter Spoon 15g (cal 130)"
       ],
       "vegetarian": [
-        "Smoothie Bowl",
-        "Boiled Egg + Veggies",
-        "Energy Bites + Honey",
-        "Chia Pudding",
-        "Fruit + Almonds"
+        "Smoothie Bowl 200ml (cal 150)",
+        "Boiled Egg 60g + Veggies 100g (cal 140)",
+        "Energy Bites 3x + Honey 10g (cal 160)",
+        "Chia Pudding 30g (cal 130)",
+        "Fruit 120g + Almonds 20g (cal 150)"
       ],
       "glutenFree": [
-        "Rice Cake + Nut Butter",
-        "Fruit + Chia Seeds",
-        "Cucumber Slices + Hummus",
-        "Apple + Almond Butter",
-        "Dates + Mixed Nuts"
+        "Rice Cake 1x + Nut Butter 10g (cal 140)",
+        "Fruit 100g + Chia Seeds 10g (cal 130)",
+        "Cucumber Slices 100g + Hummus 30g (cal 120)",
+        "Apple 100g + Almond Butter 10g (cal 140)",
+        "Dates 40g + Mixed Nuts 20g (cal 150)"
       ]
     }
   }

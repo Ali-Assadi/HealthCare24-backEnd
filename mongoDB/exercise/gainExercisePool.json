@@ -1,54 +1,54 @@
 {
   "gain": {
     "default": [
-      "Barbell Squats",
-      "Deadlifts",
-      "Bench Press",
-      "Pull-ups",
-      "Overhead Press",
-      "Dumbbell Rows",
-      "Lunges",
-      "Leg Press"
+      "Barbell Squats - 4 sets x 8 reps",
+      "Deadlifts - 4 sets x 6 reps",
+      "Bench Press - 4 sets x 8 reps",
+      "Pull-ups - 3 sets x 10 reps",
+      "Overhead Press - 3 sets x 8 reps",
+      "Dumbbell Rows - 4 sets x 10 reps",
+      "Lunges - 3 sets x 12 reps (each leg)",
+      "Leg Press - 4 sets x 10 reps"
     ],
     "noLegs": [
-      "Incline Dumbbell Press",
-      "Seated Cable Rows",
-      "Lat Pulldown",
-      "Chest Press Machine",
-      "Bicep Curls (Seated)"
+      "Incline Dumbbell Press - 4 sets x 10 reps",
+      "Seated Cable Rows - 3 sets x 12 reps",
+      "Lat Pulldown - 4 sets x 10 reps",
+      "Chest Press Machine - 4 sets x 10 reps",
+      "Bicep Curls (Seated) - 3 sets x 12 reps"
     ],
     "noBack": [
-      "Barbell Squats",
-      "Leg Press",
-      "Seated Chest Press",
-      "Leg Extensions",
-      "Calf Raises"
+      "Barbell Squats - 3 sets x 10 reps",
+      "Leg Press - 4 sets x 12 reps",
+      "Seated Chest Press - 3 sets x 10 reps",
+      "Leg Extensions - 4 sets x 12 reps",
+      "Calf Raises - 3 sets x 20 reps"
     ],
     "noWeights": [
-      "Push-ups (Standard)",
-      "Push-ups (Diamond)",
-      "Bodyweight Squats",
-      "Lunges (Bodyweight)",
-      "Pull-ups (or Assisted)",
-      "Plank to Push-up",
-      "Wall Sits",
-      "Glute Bridges",
-      "Superman Hold",
-      "Leg Raises"
+      "Push-ups (Standard) - 4 sets x 15 reps",
+      "Push-ups (Diamond) - 3 sets x 12 reps",
+      "Bodyweight Squats - 4 sets x 20 reps",
+      "Lunges (Bodyweight) - 3 sets x 15 reps (each leg)",
+      "Pull-ups (or Assisted) - 3 sets x 10 reps",
+      "Plank to Push-up - 3 sets x 10 reps",
+      "Wall Sits - 3 sets x 45 sec",
+      "Glute Bridges - 3 sets x 20 reps",
+      "Superman Hold - 3 sets x 30 sec",
+      "Leg Raises - 3 sets x 15 reps"
     ],
     "noPush": [
-      "Deadlifts",
-      "Pull-ups",
-      "Dumbbell Rows",
-      "Barbell Curls",
-      "Rear Delt Flys"
+      "Deadlifts - 4 sets x 6 reps",
+      "Pull-ups - 4 sets x 10 reps",
+      "Dumbbell Rows - 4 sets x 10 reps",
+      "Barbell Curls - 3 sets x 12 reps",
+      "Rear Delt Flys - 3 sets x 12 reps"
     ],
     "noPull": [
-      "Push-ups",
-      "Bench Press",
-      "Overhead Press",
-      "Tricep Dips",
-      "Chest Fly"
+      "Push-ups - 4 sets x 15 reps",
+      "Bench Press - 4 sets x 8 reps",
+      "Overhead Press - 3 sets x 8 reps",
+      "Tricep Dips - 3 sets x 12 reps",
+      "Chest Fly - 3 sets x 12 reps"
     ]
   }
 }

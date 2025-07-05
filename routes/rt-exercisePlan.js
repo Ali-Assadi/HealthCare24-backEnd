@@ -27,7 +27,6 @@ router.post("/generate", async (req, res) => {
       return res.status(500).json({ message: "❌ Invalid plan format in DB" });
     }
 
-    // Determine which restriction group to use (default fallback)
     let chosenKey = "default";
     for (const key of restrictions) {
       if (Array.isArray(workoutSets[key]) && workoutSets[key].length > 0) {
@@ -37,18 +36,18 @@ router.post("/generate", async (req, res) => {
     }
 
     const exercises = workoutSets[chosenKey];
-    if (!exercises || exercises.length === 0) {
+    if (!exercises || exercises.length < 3) {
       return res.status(404).json({
-        message: "No exercises available for the selected restriction",
+        message: "Not enough exercises available for the selected restriction",
       });
     }
 
-    // Generate 4 weeks × 4 days plan
     const plan = [];
     for (let week = 1; week <= 4; week++) {
       const days = [];
       for (let day = 1; day <= 4; day++) {
-        const workout = exercises[Math.floor(Math.random() * exercises.length)];
+        const shuffled = [...exercises].sort(() => 0.5 - Math.random());
+        const workout = shuffled.slice(0, 3); // 3 exercises per day
         days.push({
           day,
           type: goal,
@@ -116,30 +115,73 @@ router.patch("/update-finished-exercise-day", async (req, res) => {
   }
 });
 
+// PATCH /api/exercise/reset-finished-exercise
 router.patch("/reset-finished-exercise", async (req, res) => {
   const { email } = req.body;
 
   try {
     const user = await User.findOne({ email });
-    if (!user || !user.exercisePlan) {
-      return res
-        .status(404)
-        .json({ message: "User not found or no exercise plan" });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    for (let week of user.exercisePlan) {
+      for (let day of week.days) {
+        day.finished = false;
+      }
     }
 
-    user.exercisePlan.forEach((week) => {
-      week.days.forEach((day) => {
-        day.finished = false;
-      });
-    });
+    user.hasReviewedExercise = false;
 
-    user.markModified("exercisePlan");
+    await user.save();
+    res.json({ message: "Exercise plan reset and review flag cleared." });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to reset exercise plan", error: err });
+  }
+});
+
+// PATCH /api/exercise/submit-review
+router.patch("/submit-review", async (req, res) => {
+  const { email, review, weight, details } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (review && review.length > 3) {
+      user.exerciseReviews.push({ text: review });
+    }
+
+    if (weight) user.weight = weight;
+    if (details) user.details = details;
+
+    user.hasReviewedExercise = true;
+
     await user.save();
 
-    res.json({ message: "✅ Exercise plan reset successfully" });
+    res.json({ message: "✅ Exercise review saved and user updated" });
   } catch (err) {
-    console.error("Error resetting exercise plan:", err);
-    res.status(500).json({ message: "❌ Server error", error: err });
+    console.error("❌ Error saving exercise review:", err);
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+// 🔁 Reset + clear exercise plan after review
+router.patch("/reset-plan-after-review", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.exercisePlan = [];
+    user.hasReviewedExercise = false;
+    await user.save();
+
+    res.json({ message: "✅ Exercise plan cleared" });
+  } catch (err) {
+    console.error("❌ Error resetting plan:", err);
+    res.status(500).json({ message: "❌ Failed to reset plan", error: err });
   }
 });
 

@@ -148,4 +148,57 @@ router.patch("/restart-plan", async (req, res) => {
   }
 });
 
+// ✅ PATCH /api/dietplan/update-after-diet
+router.patch("/update-after-diet", async (req, res) => {
+  const { email, review, weight, details } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (!Array.isArray(user.dietReviews)) {
+      user.dietReviews = [];
+    }
+
+    if (review && typeof review === "string" && review.trim().length > 0) {
+      user.dietReviews.push({ text: review.trim() });
+      user.hasReviewedDiet = true;
+    }
+
+    if (typeof weight === "number" && weight > 0) {
+      user.weight = weight;
+    }
+
+    if (typeof details === "string" && details.trim().length > 0) {
+      user.details = details.trim();
+    }
+
+    await user.save();
+
+    res.json({ message: "✅ Review and updates saved successfully." });
+  } catch (err) {
+    console.error("Update review error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// ❌ PATCH /api/dietplan/clear
+router.patch("/clear", async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.dietPlan = [];
+    user.hasReviewedDiet = false;
+    await user.save();
+
+    res.json({ message: "Diet plan cleared and review reset." });
+  } catch (err) {
+    console.error("Clear plan error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
 module.exports = router;

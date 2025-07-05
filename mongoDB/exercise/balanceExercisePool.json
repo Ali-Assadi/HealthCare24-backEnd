@@ -1,54 +1,54 @@
 {
   "balance": {
     "default": [
-      "Yoga Flow (Full Body)",
-      "Pilates Core Routine",
-      "Bodyweight Circuit (Push-ups, Squats, Plank)",
-      "Resistance Band Rows",
-      "Walking Lunges",
-      "Plank Variations",
-      "Stability Ball Workouts",
-      "Jump Rope Intervals"
+      "Yoga Flow (Full Body) - 20 min",
+      "Pilates Core Routine - 15 min",
+      "Bodyweight Circuit (Push-ups, Squats, Plank) - 3 rounds x 30 sec each",
+      "Resistance Band Rows - 3 sets x 15 reps",
+      "Walking Lunges - 3 sets x 12 reps each leg",
+      "Plank Variations - 3 sets x 30 sec",
+      "Stability Ball Workouts - 3 sets x 10 reps",
+      "Jump Rope Intervals - 4 sets x 1 min"
     ],
     "noLegs": [
-      "Seated Shoulder Press",
-      "Resistance Band Bicep Curls",
-      "Wall Push-ups",
-      "Dumbbell Chest Flys (Flat Bench)",
-      "Seated Rows"
+      "Seated Shoulder Press - 3 sets x 12 reps",
+      "Resistance Band Bicep Curls - 3 sets x 15 reps",
+      "Wall Push-ups - 3 sets x 15 reps",
+      "Dumbbell Chest Flys (Flat Bench) - 3 sets x 12 reps",
+      "Seated Rows - 3 sets x 15 reps"
     ],
     "noBack": [
-      "Standing Shoulder Press",
-      "Forward Lunges",
-      "Goblet Squats",
-      "Bodyweight Step-ups",
-      "Wall Sits"
+      "Standing Shoulder Press - 3 sets x 12 reps",
+      "Forward Lunges - 3 sets x 12 reps each leg",
+      "Goblet Squats - 3 sets x 12 reps",
+      "Bodyweight Step-ups - 3 sets x 12 reps each leg",
+      "Wall Sits - 3 sets x 45 sec"
     ],
     "noWeights": [
-      "Yoga Sun Salutations",
-      "Pilates Bridge Series",
-      "Bird-Dog",
-      "Wall Sits",
-      "Side Plank",
-      "High Knees",
-      "Bodyweight Squats",
-      "Superman Hold",
-      "Mountain Climbers",
-      "Side-Lying Leg Raises"
+      "Yoga Sun Salutations - 3 rounds x 5 min",
+      "Pilates Bridge Series - 3 sets x 15 reps",
+      "Bird-Dog - 3 sets x 10 reps each side",
+      "Wall Sits - 3 sets x 45 sec",
+      "Side Plank - 3 sets x 30 sec each side",
+      "High Knees - 4 sets x 30 sec",
+      "Bodyweight Squats - 3 sets x 20 reps",
+      "Superman Hold - 3 sets x 30 sec",
+      "Mountain Climbers - 4 sets x 30 sec",
+      "Side-Lying Leg Raises - 3 sets x 15 reps each side"
     ],
     "noPush": [
-      "Resistance Band Rows",
-      "Bodyweight Squats",
-      "Side Plank with Leg Raise",
-      "Wall Sits",
-      "Step-ups"
+      "Resistance Band Rows - 3 sets x 15 reps",
+      "Bodyweight Squats - 3 sets x 20 reps",
+      "Side Plank with Leg Raise - 3 sets x 10 reps each side",
+      "Wall Sits - 3 sets x 45 sec",
+      "Step-ups - 3 sets x 12 reps each leg"
     ],
     "noPull": [
-      "Yoga Poses (Tree, Warrior)",
-      "Push-ups",
-      "Lunges",
-      "Overhead Shoulder Press",
-      "Calf Raises"
+      "Yoga Poses (Tree, Warrior) - 3 rounds x 30 sec each",
+      "Push-ups - 3 sets x 15 reps",
+      "Lunges - 3 sets x 12 reps each leg",
+      "Overhead Shoulder Press - 3 sets x 12 reps",
+      "Calf Raises - 3 sets x 20 reps"
     ]
   }
 }
