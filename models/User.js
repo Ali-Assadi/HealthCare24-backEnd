@@ -58,6 +58,11 @@ const UserSchema = new mongoose.Schema({
     type: [WeekSchema],
     default: [],
   },
+  dietRestrictions: {
+    type: [String],
+    enum: ["egg", "milk", "meat", "fish", "gluten", "vegetarian"],
+    default: [],
+  },
 
   goal: { type: String, default: "" },
   mustUpdatePassword: { type: Boolean, default: false },
@@ -68,6 +73,12 @@ const UserSchema = new mongoose.Schema({
     default: [],
   },
 
+  exerciseRestrictions: {
+    // for Exercise Program
+    type: [String],
+    default: [],
+    enum: ["noLegs", "noBack", "noPush", "noPull", "noWeights"],
+  },
   isSubscribed: { type: Boolean, default: false },
   visaCard: VisaCardSchema,
 

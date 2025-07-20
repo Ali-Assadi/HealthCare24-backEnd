@@ -15,6 +15,10 @@ router.post("/generate", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
+    // ✅ Save selected restrictions to user
+    user.exerciseRestrictions = restrictions;
+    user.goal = goal;
+
     const planPool = await ExercisePlanModel.findOne({ goal });
     if (!planPool) {
       return res
@@ -47,7 +51,7 @@ router.post("/generate", async (req, res) => {
       const days = [];
       for (let day = 1; day <= 4; day++) {
         const shuffled = [...exercises].sort(() => 0.5 - Math.random());
-        const workout = shuffled.slice(0, 3); // 3 exercises per day
+        const workout = shuffled.slice(0, 3);
         days.push({
           day,
           type: goal,
@@ -59,7 +63,6 @@ router.post("/generate", async (req, res) => {
       plan.push({ week, days });
     }
 
-    user.goal = goal;
     user.exercisePlan = plan;
     await user.save();
 
@@ -182,6 +185,66 @@ router.patch("/reset-plan-after-review", async (req, res) => {
   } catch (err) {
     console.error("❌ Error resetting plan:", err);
     res.status(500).json({ message: "❌ Failed to reset plan", error: err });
+  }
+});
+
+router.get("/suggestions", async (req, res) => {
+  const { goal, restriction = "default" } = req.query;
+
+  try {
+    const planPool = await ExercisePlanModel.findOne({ goal });
+    const set = planPool?.plan?.[restriction] || [];
+
+    if (set.length === 0) {
+      return res.status(404).json({ message: "No exercises found" });
+    }
+
+    const shuffled = [...set].sort(() => 0.5 - Math.random());
+    res.json({ exercises: shuffled });
+  } catch (err) {
+    res.status(500).json({ message: "Server error", error: err });
+  }
+});
+
+router.patch("/customize-day", async (req, res) => {
+  const { email, weekIndex, dayIndex, newWorkout } = req.body;
+
+  // Validate input
+  if (
+    !email ||
+    weekIndex === undefined ||
+    dayIndex === undefined ||
+    !Array.isArray(newWorkout) ||
+    newWorkout.length === 0
+  ) {
+    return res.status(400).json({ message: "Missing or invalid data" });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (!user.isSubscribed) {
+      return res
+        .status(403)
+        .json({ message: "Only subscribed users can customize workouts" });
+    }
+
+    const day = user.exercisePlan?.[weekIndex]?.days?.[dayIndex];
+    if (!day) {
+      return res.status(400).json({ message: "Invalid week/day index" });
+    }
+
+    // Update workout
+    day.workout = newWorkout;
+    user.markModified("exercisePlan");
+
+    await user.save();
+
+    res.json({ message: "✅ Day customized successfully" });
+  } catch (err) {
+    console.error("❌ Error customizing day:", err);
+    res.status(500).json({ message: "❌ Server error", error: err });
   }
 });
 

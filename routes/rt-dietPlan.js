@@ -64,6 +64,7 @@ router.post("/generate-diet-plan", async (req, res) => {
     user.dietPlan = planWeeks;
     user.goal = goal;
     user.hasReviewedDiet = false;
+    user.dietRestrictions = restrictions;
     await user.save();
 
     res.json({
@@ -197,6 +198,69 @@ router.patch("/clear", async (req, res) => {
     res.json({ message: "Diet plan cleared and review reset." });
   } catch (err) {
     console.error("Clear plan error:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
+  }
+});
+
+// ✅ PATCH /api/dietplan/shuffle-meal
+router.patch("/shuffle-meal", async (req, res) => {
+  const { email, weekIndex, dayIndex, mealType } = req.body;
+
+  if (
+    !email ||
+    weekIndex === undefined ||
+    dayIndex === undefined ||
+    !mealType
+  ) {
+    return res.status(400).json({ message: "Missing required fields." });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user || !user.goal || !user.isSubscribed) {
+      return res
+        .status(404)
+        .json({ message: "User not found or not subscribed." });
+    }
+
+    const pool = await DietPool.findOne({ goal: user.goal.toLowerCase() });
+    if (!pool || !pool.meals?.[mealType]) {
+      return res.status(404).json({ message: "Meal pool not found." });
+    }
+
+    const keys = user.dietRestrictions.map((r) => {
+      if (r === "gluten") return "glutenFree";
+      if (r === "vegetarian") return "vegetarian";
+      return `no${r.charAt(0).toUpperCase()}${r.slice(1)}`;
+    });
+
+    // Collect eligible meals
+    let mealSet = [];
+    keys.forEach((k) => {
+      if (pool.meals[mealType][k]) {
+        mealSet.push(...pool.meals[mealType][k]);
+      }
+    });
+
+    mealSet.push(...(pool.meals[mealType].default || []));
+    mealSet = [...new Set(mealSet)];
+
+    if (!mealSet.length) {
+      return res.status(404).json({ message: "No meals found." });
+    }
+
+    const randomMeal = mealSet[Math.floor(Math.random() * mealSet.length)];
+    user.dietPlan[weekIndex].days[dayIndex][mealType] = randomMeal;
+
+    user.markModified("dietPlan");
+    await user.save();
+
+    res.json({
+      message: `✅ ${mealType} updated to new random meal.`,
+      newMeal: randomMeal,
+    });
+  } catch (err) {
+    console.error("❌ shuffle-meal error:", err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
