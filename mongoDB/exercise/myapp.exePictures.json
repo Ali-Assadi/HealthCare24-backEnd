@@ -1,0 +1,63 @@
+[{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc21"
+  },
+  "name": "Bodyweight HIIT Circuit",
+  "path": "assets/exercises/BodyWeightHIITCircuit.png"
+},
+{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc22"
+  },
+  "name": "Burpees",
+  "path": "assets/exercises/Burpees.webp"
+},
+{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc23"
+  },
+  "name": "Cycling (Stationary or Outdoor)",
+  "path": "assets/exercises/Cycling.png"
+},
+{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc24"
+  },
+  "name": "High Knee",
+  "path": "assets/exercises/HighKnee.png"
+},
+{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc25"
+  },
+  "name": "Jumping Jacks",
+  "path": "assets/exercises/JumpingJacks.png"
+},
+{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc26"
+  },
+  "name": "Jump Rope Intervals",
+  "path": "assets/exercises/jumpRope.png"
+},
+{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc27"
+  },
+  "name": "Mountain Climbers",
+  "path": "assets/exercises/MountainClimbers.png"
+},
+{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc28"
+  },
+  "name": "Running Intervals",
+  "path": "assets/exercises/RunningIntervals.png"
+},
+{
+  "_id": {
+    "$oid": "687cb7bed575e3cd3d29cc29"
+  },
+  "name": "Shadow Boxing",
+  "path": "assets/exercises/ShadowBoxing.png"
+}]

@@ -18,6 +18,9 @@ const orderRoutes = require("./routes/rt-order");
 const healthArticlesRoute = require("./routes/rt-healthArticle");
 const nutritionRoute = require("./routes/rt-nutritionArticles");
 const fitnessArticlesRoute = require("./routes/rt-fitnessArtciles");
+const exePictureRoutes = require('./routes/exePicture.routes');
+
+
 
 const app = express();
 
@@ -54,6 +57,9 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/healthArticles", healthArticlesRoute);
 app.use("/api/nutritionArticles", nutritionRoute);
 app.use("/api/fitnessArticles", fitnessArticlesRoute);
+app.use('/api/exePictures', exePictureRoutes);
+
+
 
 const PORT = 3000;
 app.listen(PORT, () =>
