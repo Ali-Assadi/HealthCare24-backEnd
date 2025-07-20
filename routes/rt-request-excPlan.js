@@ -42,14 +42,30 @@ router.post("/request-new-fitness-plan", async (req, res) => {
         to: email,
         subject: "✅ Fitness Plan Request Received",
         html: `
-          <div style="font-family: 'Segoe UI', sans-serif; background-color: #f0fff4; padding: 25px; border-radius: 10px; border: 1px solid #d4edda;">
-            <h2 style="color: #28a745;">✅ We've received your fitness plan request!</h2>
-            <p style="font-size: 16px;">Thank you, <strong>${email}</strong>, for your request.</p>
-            <p style="margin-top: 15px;">Our team will review your request and send you an updated plan soon.</p>
-            <hr style="margin: 20px 0;" />
-            <p style="font-size: 14px; color: #555;">💪 Stay healthy and strong,<br>HealthCare24 Team</p>
-          </div>
-        `,
+    <div style="
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f4f8;
+      border: 2px solid #a29bfe;
+      padding: 25px;
+      border-radius: 12px;
+      max-width: 600px;
+      margin: auto;
+    ">
+      <h2 style="color: #6c5ce7; font-size: 24px; margin-bottom: 15px;">
+        ✅ We've received your fitness plan request!
+      </h2>
+      <p style="font-size: 16px; color: #2e2e2e;">
+        Thank you, <strong>${email}</strong>, for submitting your request.
+      </p>
+      <p style="font-size: 15px; margin-top: 15px; color: #2e2e2e;">
+        Our team will review your request and send you a personalized plan soon.
+      </p>
+      <hr style="margin: 20px 0; border-color: #dcdcdc;" />
+      <p style="font-size: 14px; color: #555;">
+        💪 Stay strong and healthy,<br><strong>HealthCare24 Team</strong>
+      </p>
+    </div>
+  `,
       };
 
       await transporter.sendMail(adminMail);

@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/rt-auth");
 const chatRoutes = require("./routes/rt-chat");
 const subscribeRoutes = require("./routes/rt-subscribe");
-const requestRoutes = require("./routes/rt-request-dietPlan");
+const requestDiet = require("./routes/rt-request-dietPlan");
+const requestExercise = require("./routes/rt-request-excPlan");
 const dietPlanRoutes = require("./routes/rt-dietPlan");
 const adminRoutes = require("./routes/rt-admin");
 const exercisePlanRoutes = require("./routes/rt-exercisePlan");
@@ -44,8 +45,9 @@ mongoose
 // Mount routes
 app.use("/api", authRoutes);
 app.use("/api", subscribeRoutes);
-app.use("/api", requestRoutes);
-app.use("/api/dietplan", dietPlanRoutes);
+app.use("/api", requestDiet);
+app.use("/api", requestExercise);
+app.use("/api/dietPlan", dietPlanRoutes);
 app.use("/api/exercise", exercisePlanRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/chat", chatRoutes);

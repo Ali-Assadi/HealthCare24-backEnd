@@ -143,4 +143,20 @@ router.put("/exercises/:email", async (req, res) => {
   }
 });
 
+// GET /api/admin/all-reviews
+router.get("/all-reviews", async (req, res) => {
+  try {
+    const users = await User.find({}, "email dietReviews exerciseReviews");
+    const reviews = users.map((user) => ({
+      email: user.email,
+      dietReviews: user.dietReviews || [],
+      exerciseReviews: user.exerciseReviews || [],
+    }));
+    res.json(reviews);
+  } catch (err) {
+    console.error("Error fetching all reviews:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 module.exports = router;

@@ -32,12 +32,25 @@ router.post("/request-new-plan", async (req, res) => {
         to: email,
         subject: "✅ Diet Plan Request Received",
         html: `
-          <div style="font-family: sans-serif; padding: 20px;">
-            <h3 style="color: #4CAF50;">Thank you for your request!</h3>
-            <p>We received your request for a new diet plan. Our team will review and respond shortly.</p>
-            <p>💚 Stay healthy,<br/>HealthCare24 Team</p>
-          </div>
-        `,
+    <div style="background-color: #f0f4f8; padding: 40px 0;">
+      <div style="
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #fffaf4;
+        padding: 25px;
+        border-radius: 10px;
+        border: 1px solid #ffe0b2;
+        max-width: 600px;
+        margin: 0 auto;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      ">
+        <h2 style="color: #ff7043;">🥗 Diet Plan Request Received!</h2>
+        <p style="font-size: 16px;">Thank you, <strong>${email}</strong>, for submitting your request.</p>
+        <p style="margin-top: 15px;">Our nutrition team is preparing your customized plan. You’ll hear back from us shortly.</p>
+        <hr style="margin: 20px 0;" />
+        <p style="font-size: 14px; color: #555;">💚 Stay healthy and nourished,<br>HealthCare24 Team</p>
+      </div>
+    </div>
+  `,
       };
 
       await transporter.sendMail(adminMail);
