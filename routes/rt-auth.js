@@ -418,7 +418,7 @@ router.post("/user/:email/visa", async (req, res) => {
 });
 
 // add the visa for user if not exist
-router.post("/user/:email/visa", async (req, res) => {
+router.post("/user/:email/visaSub", async (req, res) => {
   const { cardHolderName, last4Digits, expiryMonth, expiryYear } = req.body;
 
   if (!cardHolderName || !last4Digits || !expiryMonth || !expiryYear) {
@@ -494,5 +494,25 @@ router.patch("/user/update-after-diet", async (req, res) => {
     res.status(500).json({ message: "Server error", error: err });
   }
 });
+// ✅ Update isSubscribed to true
+router.put("/user/:email/subscribe", async (req, res) => {
+  try {
+    const user = await User.findOneAndUpdate(
+      { email: req.params.email },
+      { isSubscribed: true },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User subscribed successfully", user });
+  } catch (err) {
+    console.error("❌ Failed to update subscription:", err);
+    res.status(500).json({ message: "Failed to update subscription", error: err });
+  }
+});
+
 
 module.exports = router;
