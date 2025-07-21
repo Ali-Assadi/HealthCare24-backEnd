@@ -10,7 +10,7 @@
     "$oid": "687cb7bed575e3cd3d29cc22"
   },
   "name": "Burpees",
-  "path": "assets/exercises/Burpees.webp"
+  "path": "assets/exercises/Burpees.png"
 },
 {
   "_id": {
@@ -60,4 +60,60 @@
   },
   "name": "Shadow Boxing",
   "path": "assets/exercises/ShadowBoxing.png"
+},
+{
+  "_id": {
+    "$oid": "687e281ffcc26bc0bcdbfeb8"
+  },
+  "name": "Barbell Squats",
+  "path": "assets/exercises/BarbellSquats.png"
+},
+{
+  "_id": {
+    "$oid": "687e281ffcc26bc0bcdbfeb9"
+  },
+  "name": "Leg Press",
+  "path": "assets/exercises/LegPress.png"
+},
+{
+  "_id": {
+    "$oid": "687e281ffcc26bc0bcdbfeba"
+  },
+  "name": "Deadlifts",
+  "path": "assets/exercises/Deadlifts.png"
+},
+{
+  "_id": {
+    "$oid": "687e281ffcc26bc0bcdbfebb"
+  },
+  "name": "Pull-ups",
+  "path": "assets/exercises/Pull-ups.png"
+},
+{
+  "_id": {
+    "$oid": "687e281ffcc26bc0bcdbfebc"
+  },
+  "name": "Dumbbell Rows",
+  "path": "assets/exercises/DumbbellRows.png"
+},
+{
+  "_id": {
+    "$oid": "687e281ffcc26bc0bcdbfebd"
+  },
+  "name": "Bench Press",
+  "path": "assets/exercises/BenchPress.png"
+},
+{
+  "_id": {
+    "$oid": "687e281ffcc26bc0bcdbfebe"
+  },
+  "name": "Overhead Press",
+  "path": "assets/exercises/OverheadPress.png"
+},
+{
+  "_id": {
+    "$oid": "687e281ffcc26bc0bcdbfebf"
+  },
+  "name": "Lunges",
+  "path": "assets/exercises/Lunges.png"
 }]
