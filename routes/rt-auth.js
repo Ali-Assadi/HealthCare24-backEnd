@@ -406,6 +406,43 @@ router.post("/user/:email/visa", async (req, res) => {
       expiryYear,
       brand: "Visa",
     };
+    await user.save();
+
+    res.status(201).json({
+      message: "Visa card added successfully",
+      visaCard: user.visaCard,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to add visa card", error: err });
+  }
+});
+
+// add the visa for user if not exist
+router.post("/user/:email/visa", async (req, res) => {
+  const { cardHolderName, last4Digits, expiryMonth, expiryYear } = req.body;
+
+  if (!cardHolderName || !last4Digits || !expiryMonth || !expiryYear) {
+    return res.status(400).json({ message: "Missing Visa card fields" });
+  }
+
+  try {
+    const user = await User.findOne({ email: req.params.email });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    if (user.visaCard) {
+      return res
+        .status(400)
+        .json({ message: "Visa card already exists. Use PUT to update." });
+    }
+
+    user.visaCard = {
+      cardHolderName,
+      last4Digits,
+      expiryMonth,
+      expiryYear,
+      brand: "Visa",
+    };
     user.isSubscribed = true;
     await user.save();
 
