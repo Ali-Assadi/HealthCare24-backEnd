@@ -265,6 +265,7 @@ router.delete("/user/:email", async (req, res) => {
     res.status(500).json({ message: "Failed to delete user" });
   }
 });
+
 // Save or update user diet plan
 router.put("/user/:email/diet", async (req, res) => {
   const { goal, plan } = req.body;
@@ -510,9 +511,10 @@ router.put("/user/:email/subscribe", async (req, res) => {
     res.status(200).json({ message: "User subscribed successfully", user });
   } catch (err) {
     console.error("❌ Failed to update subscription:", err);
-    res.status(500).json({ message: "Failed to update subscription", error: err });
+    res
+      .status(500)
+      .json({ message: "Failed to update subscription", error: err });
   }
 });
-
 
 module.exports = router;

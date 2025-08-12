@@ -5,19 +5,30 @@ const User = require("../models/User");
 
 // Capitalize helper
 const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
+
 // Random picker
 const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 // 🧠 Core generation logic
 const generatePlan = (meals, restrictions = []) => {
-  const cleaned = restrictions.map((r) => `no${capitalize(r)}`);
+  const restrictionKey = (r) => {
+    const specialCases = new Set(["vegetarian", "glutenFree"]);
+    return specialCases.has(r) ? r : `no${capitalize(r)}`;
+  };
+
+  const cleaned = restrictions.map(restrictionKey);
   const fallback = "default";
 
   const getMeal = (type) => {
     for (const key of cleaned) {
-      if (meals[type][key]) return pickRandom(meals[type][key]);
+      const arr = meals[type][key];
+      if (Array.isArray(arr) && arr.length > 0) {
+        return pickRandom(arr);
+      }
     }
-    return pickRandom(meals[type][fallback]);
+    // fallback if no restriction matched or no meals in restriction
+    const arr = meals[type][fallback];
+    return Array.isArray(arr) && arr.length > 0 ? pickRandom(arr) : null;
   };
 
   const weeks = [];
@@ -183,7 +194,7 @@ router.patch("/update-after-diet", async (req, res) => {
   }
 });
 
-// ❌ PATCH /api/dietplan/clear
+// ❌ PATCH /api/dietplan/clear ADMIN
 router.patch("/clear", async (req, res) => {
   const { email } = req.body;
 
@@ -234,7 +245,7 @@ router.patch("/shuffle-meal", async (req, res) => {
       return `no${r.charAt(0).toUpperCase()}${r.slice(1)}`;
     });
 
-    // Collect eligible meals
+    // Collect meals
     let mealSet = [];
     keys.forEach((k) => {
       if (pool.meals[mealType][k]) {
