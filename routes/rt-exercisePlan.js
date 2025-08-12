@@ -5,38 +5,17 @@ const User = require("../models/User");
 const ExercisePlanModel = require("../models/ExercisePlan");
 
 router.post("/generate", async (req, res) => {
-  const { email, goal } = req.body;
-  let { restrictions = [] } = req.body;
+  const { email, goal, restrictions = [] } = req.body;
 
   if (!email || !goal) {
     return res.status(400).json({ message: "Email and goal are required" });
-  }
-
-  // 🛡️ Normalize restrictions to a clean array of strings
-  try {
-    if (typeof restrictions === "string") {
-      restrictions = restrictions
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean);
-    } else if (!Array.isArray(restrictions)) {
-      restrictions = [];
-    } else {
-      restrictions = restrictions
-        .map(String)
-        .map((s) => s.trim())
-        .filter(Boolean);
-    }
-  } catch (e) {
-    console.error("❌ Restrictions normalization error:", e);
-    restrictions = [];
   }
 
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // ✅ Save selected restrictions to user (NOTE: your frontend reads user.restrictions; consider aligning)
+    // ✅ Save selected restrictions to user
     user.exerciseRestrictions = restrictions;
     user.goal = goal;
 
@@ -48,100 +27,22 @@ router.post("/generate", async (req, res) => {
     }
 
     const workoutSets = planPool.plan;
-    if (!workoutSets || typeof workoutSets !== "object") {
+    if (!workoutSets) {
       return res.status(500).json({ message: "❌ Invalid plan format in DB" });
     }
-    const defaultBucket = Array.isArray(workoutSets.default)
-      ? workoutSets.default
-      : [];
 
-    // ✅ Build candidates respecting multiple restrictions
-    const validKeys = (restrictions || []).filter(
-      (k) => Array.isArray(workoutSets[k]) && workoutSets[k].length > 0
-    );
-
-    let appliedKeys = [];
-    let candidate = [];
-
-    // Helper: Fisher–Yates shuffle
-    const shuffleInPlace = (arr) => {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
+    let chosenKey = "default";
+    for (const key of restrictions) {
+      if (Array.isArray(workoutSets[key]) && workoutSets[key].length > 0) {
+        chosenKey = key;
+        break;
       }
-      return arr;
-    };
-
-    try {
-      if (validKeys.length === 0) {
-        // No valid restriction arrays → use default
-        appliedKeys = ["default"];
-        candidate = [...defaultBucket];
-      } else {
-        // AND logic (intersection)
-        const toSet = (arr) => new Set(Array.isArray(arr) ? arr : []);
-        const intersect = (a, b) => new Set([...a].filter((x) => b.has(x)));
-        let current = toSet(workoutSets[validKeys[0]]);
-        appliedKeys = [validKeys[0]];
-
-        for (let i = 1; i < validKeys.length; i++) {
-          const key = validKeys[i];
-          current = intersect(current, toSet(workoutSets[key]));
-          appliedKeys.push(key);
-        }
-
-        if (current.size >= 3) {
-          candidate = [...current];
-        } else {
-          // OR logic (union)
-          const union = (a, b) => new Set([...a, ...b]);
-          let uni = new Set();
-          for (const k of validKeys) {
-            uni = union(uni, new Set(workoutSets[k] || []));
-          }
-
-          if (uni.size >= 3) {
-            candidate = [...uni];
-          } else {
-            // Largest single bucket
-            let largestKey = validKeys[0];
-            for (const k of validKeys.slice(1)) {
-              if (
-                (workoutSets[k] || []).length >
-                (workoutSets[largestKey] || []).length
-              ) {
-                largestKey = k;
-              }
-            }
-            candidate = [...(workoutSets[largestKey] || [])];
-
-            // Final fallback: default
-            if (candidate.length < 3) {
-              candidate = [...defaultBucket];
-              appliedKeys = ["default"];
-            }
-          }
-        }
-      }
-    } catch (mixErr) {
-      console.error("❌ Mixing restrictions failed:", {
-        restrictions,
-        validKeys,
-        err: mixErr,
-      });
-      // Safe fallback
-      appliedKeys = ["default"];
-      candidate = [...defaultBucket];
     }
 
-    if (!candidate || candidate.length < 3) {
+    const exercises = workoutSets[chosenKey];
+    if (!exercises || exercises.length < 3) {
       return res.status(404).json({
-        message: "Not enough exercises available for the selected restrictions",
-        details: {
-          restrictions: restrictions,
-          appliedKeys,
-          candidateLen: candidate?.length || 0,
-        },
+        message: "Not enough exercises available for the selected restriction",
       });
     }
 
@@ -149,13 +50,13 @@ router.post("/generate", async (req, res) => {
     for (let week = 1; week <= 4; week++) {
       const days = [];
       for (let day = 1; day <= 4; day++) {
-        const shuffled = shuffleInPlace([...candidate]);
+        const shuffled = [...exercises].sort(() => 0.5 - Math.random());
         const workout = shuffled.slice(0, 3);
         days.push({
           day,
           type: goal,
           workout,
-          restriction: appliedKeys, // store all applied keys
+          restriction: chosenKey,
           finished: false,
         });
       }
@@ -167,18 +68,8 @@ router.post("/generate", async (req, res) => {
 
     res.json({ message: "✅ Exercise plan generated", exercisePlan: plan });
   } catch (err) {
-    // ⛳ ADDITIONAL CONTEXT IN LOGS
-    console.error("❌ Error generating plan:", {
-      body: req.body,
-      parsedRestrictions: restrictions,
-      stack: err?.stack || err,
-    });
-    res
-      .status(500)
-      .json({
-        message: "❌ Failed to generate plan",
-        error: String(err?.message || err),
-      });
+    console.error("❌ Error generating plan:", err);
+    res.status(500).json({ message: "❌ Failed to generate plan", error: err });
   }
 });
 
