@@ -1,203 +1,191 @@
 const express = require("express");
 const router = express.Router();
-const DietPool = require("../models/DietPlan"); // meal pool (gain, loss, balance)
+const DietPool = require("../models/DietPlan");
 const User = require("../models/User");
 
-// Capitalize helper
-const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1);
-
-// Random picker
+/* ----------------------------- helpers ----------------------------- */
+const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-// 🧠 Core generation logic
-const generatePlan = (meals, restrictions = []) => {
-  const restrictionKey = (r) => {
-    const specialCases = new Set(["vegetarian", "glutenFree"]);
-    return specialCases.has(r) ? r : `no${capitalize(r)}`;
-  };
-
-  const cleaned = restrictions.map(restrictionKey);
-  const fallback = "default";
-
-  const getMeal = (type) => {
-    for (const key of cleaned) {
-      const arr = meals[type][key];
-      if (Array.isArray(arr) && arr.length > 0) {
-        return pickRandom(arr);
-      }
-    }
-    // fallback if no restriction matched or no meals in restriction
-    const arr = meals[type][fallback];
-    return Array.isArray(arr) && arr.length > 0 ? pickRandom(arr) : null;
-  };
-
-  const weeks = [];
-  for (let w = 0; w < 4; w++) {
-    const days = [];
-    for (let d = 0; d < 7; d++) {
-      days.push({
-        breakfast: getMeal("breakfast"),
-        lunch: getMeal("lunch"),
-        dinner: getMeal("dinner"),
-        snack: getMeal("snack"),
-        finished: false,
-      });
-    }
-    weeks.push({ days });
-  }
-  return weeks;
+const toBucketKey = (r) => {
+  if (!r) return "default";
+  const raw = String(r).trim().toLowerCase();
+  if (raw === "vegetarian") return "vegetarian";
+  if (raw === "gluten") return "glutenFree";
+  return `no${cap(raw)}`; // egg→noEgg, milk→noMilk, etc.
 };
 
-router.get("/test", (req, res) => {
-  res.send("✅ rt-dietPlan route is working");
-});
+const buildWeeks = (meals, restrictionKey) => {
+  const get = (type) => {
+    const poolByType = meals?.[type] || {};
+    const chosen = poolByType?.[restrictionKey];
+    if (Array.isArray(chosen) && chosen.length) return pickRandom(chosen);
+    const def = poolByType?.default || [];
+    return def.length ? pickRandom(def) : null;
+  };
 
-// 📥 POST /api/dietplan/generate-diet-plan
+  return Array.from({ length: 4 }, () => ({
+    days: Array.from({ length: 7 }, () => ({
+      breakfast: get("breakfast"),
+      lunch: get("lunch"),
+      dinner: get("dinner"),
+      snack: get("snack"),
+      finished: false,
+    })),
+  }));
+};
+
+/* ------------------------------ routes ----------------------------- */
+
+router.get("/test", (_req, res) => res.send("✅ rt-dietPlan route is working"));
+
+/** POST /api/dietplan/generate-diet-plan
+ * body: { email, goal, restriction?: string, (legacy) restrictions?: string[] }
+ */
 router.post("/generate-diet-plan", async (req, res) => {
-  console.log("🚀 GENERATE PLAN HIT");
-  const { email, goal, restrictions = [] } = req.body;
-
   try {
-    console.log("📨 Received diet plan generation request:", req.body);
-    const mealPool = await DietPool.findOne({ goal: goal.toLowerCase() });
+    const { email, goal } = req.body;
+    if (!email || !goal) {
+      return res.status(400).json({ message: "Email and goal are required." });
+    }
+
+    // normalize to a single restriction
+    let restriction = (req.body.restriction || "").trim();
+    if (
+      !restriction &&
+      Array.isArray(req.body.restrictions) &&
+      req.body.restrictions.length
+    ) {
+      restriction = String(req.body.restrictions[0] || "").trim();
+    }
+    if (!restriction) restriction = "default";
+
+    const mealPool = await DietPool.findOne({
+      goal: String(goal).toLowerCase(),
+    });
     if (!mealPool || !mealPool.meals) {
       return res
         .status(404)
         .json({ message: "No meal pool found for this goal." });
     }
-    console.log("🍽️ Using meal pool:", mealPool.goal);
 
-    const planWeeks = generatePlan(mealPool.meals, restrictions);
+    const bucketKey = toBucketKey(restriction);
+    const weeks = buildWeeks(mealPool.meals, bucketKey);
 
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found." });
 
-    user.dietPlan = planWeeks;
+    user.dietPlan = weeks;
     user.goal = goal;
     user.hasReviewedDiet = false;
-    user.dietRestrictions = restrictions;
+    user.dietRestriction = restriction; // single string (new)
+    user.dietRestrictions = [restriction]; // keep legacy shape too
     await user.save();
 
-    res.json({
+    return res.json({
       message: "✅ Custom diet plan generated and saved.",
-      plan: {
-        goal,
-        email,
-        weeks: planWeeks,
-      },
+      plan: { goal, email, weeks },
     });
   } catch (err) {
     console.error("Error generating plan:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: err.message });
   }
 });
 
-// 📤 GET /api/dietplan/:email – fetch current plan
+/** GET /api/dietplan/:email */
 router.get("/:email", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email });
-    if (!user || !user.dietPlan || user.dietPlan.length === 0) {
+    if (!user || !Array.isArray(user.dietPlan) || user.dietPlan.length === 0) {
       return res.status(404).json({ message: "User or diet plan not found." });
     }
-
-    res.json({
-      goal: user.goal,
-      dietPlan: user.dietPlan,
-    });
+    return res.json({ goal: user.goal, dietPlan: user.dietPlan });
   } catch (err) {
     console.error("Fetch error:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: err.message });
   }
 });
 
-// ✅ PATCH /api/dietplan/mark-finished-day
+/** PATCH /api/dietplan/mark-finished-day */
 router.patch("/mark-finished-day", async (req, res) => {
   const { email, weekIndex, dayIndex } = req.body;
-
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (!user.dietPlan?.[weekIndex]?.days?.[dayIndex]) {
-      return res.status(400).json({ message: "Invalid indexes" });
-    }
+    const day = user.dietPlan?.[weekIndex]?.days?.[dayIndex];
+    if (!day) return res.status(400).json({ message: "Invalid indexes" });
 
-    user.dietPlan[weekIndex].days[dayIndex].finished = true;
+    day.finished = true;
     user.markModified("dietPlan");
     await user.save();
 
-    res.json({ message: "✅ Day marked as finished." });
+    return res.json({ message: "✅ Day marked as finished." });
   } catch (err) {
     console.error("Mark day error:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: err.message });
   }
 });
 
-// 🔁 PATCH /api/dietplan/restart-plan
+/** PATCH /api/dietplan/restart-plan */
 router.patch("/restart-plan", async (req, res) => {
   const { email } = req.body;
-
   try {
     const user = await User.findOne({ email });
     if (!user || !user.dietPlan) {
       return res.status(404).json({ message: "User or diet plan not found." });
     }
 
-    user.dietPlan.forEach((week) => {
-      week.days.forEach((day) => {
-        day.finished = false;
-      });
-    });
-
+    for (const week of user.dietPlan) {
+      for (const day of week.days) day.finished = false;
+    }
     user.hasReviewedDiet = false;
     user.markModified("dietPlan");
     await user.save();
 
-    res.json({ message: "🔁 Diet plan reset to unfinished." });
+    return res.json({ message: "🔁 Diet plan reset to unfinished." });
   } catch (err) {
     console.error("Restart error:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: err.message });
   }
 });
 
-// ✅ PATCH /api/dietplan/update-after-diet
+/** PATCH /api/dietplan/update-after-diet */
 router.patch("/update-after-diet", async (req, res) => {
   const { email, review, weight, details } = req.body;
-
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (!Array.isArray(user.dietReviews)) {
-      user.dietReviews = [];
-    }
-
-    if (review && typeof review === "string" && review.trim().length > 0) {
+    if (!Array.isArray(user.dietReviews)) user.dietReviews = [];
+    if (typeof review === "string" && review.trim().length > 0) {
       user.dietReviews.push({ text: review.trim() });
       user.hasReviewedDiet = true;
     }
-
-    if (typeof weight === "number" && weight > 0) {
-      user.weight = weight;
-    }
-
-    if (typeof details === "string" && details.trim().length > 0) {
+    if (typeof weight === "number" && weight > 0) user.weight = weight;
+    if (typeof details === "string" && details.trim().length > 0)
       user.details = details.trim();
-    }
 
     await user.save();
-
-    res.json({ message: "✅ Review and updates saved successfully." });
+    return res.json({ message: "✅ Review and updates saved successfully." });
   } catch (err) {
     console.error("Update review error:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: err.message });
   }
 });
 
-// ❌ PATCH /api/dietplan/clear ADMIN
+/** PATCH /api/dietplan/clear */
 router.patch("/clear", async (req, res) => {
   const { email } = req.body;
-
   try {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -206,17 +194,20 @@ router.patch("/clear", async (req, res) => {
     user.hasReviewedDiet = false;
     await user.save();
 
-    res.json({ message: "Diet plan cleared and review reset." });
+    return res.json({ message: "Diet plan cleared and review reset." });
   } catch (err) {
     console.error("Clear plan error:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: err.message });
   }
 });
 
-// ✅ PATCH /api/dietplan/shuffle-meal
+/** PATCH /api/dietplan/shuffle-meal
+ * body: { email, weekIndex, dayIndex, mealType }
+ */
 router.patch("/shuffle-meal", async (req, res) => {
   const { email, weekIndex, dayIndex, mealType } = req.body;
-
   if (
     !email ||
     weekIndex === undefined ||
@@ -234,45 +225,48 @@ router.patch("/shuffle-meal", async (req, res) => {
         .json({ message: "User not found or not subscribed." });
     }
 
-    const pool = await DietPool.findOne({ goal: user.goal.toLowerCase() });
+    const pool = await DietPool.findOne({
+      goal: String(user.goal).toLowerCase(),
+    });
     if (!pool || !pool.meals?.[mealType]) {
       return res.status(404).json({ message: "Meal pool not found." });
     }
 
-    const keys = user.dietRestrictions.map((r) => {
-      if (r === "gluten") return "glutenFree";
-      if (r === "vegetarian") return "vegetarian";
-      return `no${r.charAt(0).toUpperCase()}${r.slice(1)}`;
-    });
+    // use single stored restriction (fallback to legacy first item)
+    const r =
+      user.dietRestriction ||
+      (Array.isArray(user.dietRestrictions) && user.dietRestrictions[0]) ||
+      "default";
+    const key = toBucketKey(r);
 
-    // Collect meals
+    // collect from chosen bucket, then add default as fallback
     let mealSet = [];
-    keys.forEach((k) => {
-      if (pool.meals[mealType][k]) {
-        mealSet.push(...pool.meals[mealType][k]);
-      }
-    });
+    if (Array.isArray(pool.meals[mealType][key]))
+      mealSet.push(...pool.meals[mealType][key]);
+    if (Array.isArray(pool.meals[mealType].default))
+      mealSet.push(...pool.meals[mealType].default);
+    mealSet = Array.from(new Set(mealSet));
 
-    mealSet.push(...(pool.meals[mealType].default || []));
-    mealSet = [...new Set(mealSet)];
-
-    if (!mealSet.length) {
+    if (!mealSet.length)
       return res.status(404).json({ message: "No meals found." });
-    }
 
-    const randomMeal = mealSet[Math.floor(Math.random() * mealSet.length)];
-    user.dietPlan[weekIndex].days[dayIndex][mealType] = randomMeal;
+    const randomMeal = pickRandom(mealSet);
+    const day = user.dietPlan?.[weekIndex]?.days?.[dayIndex];
+    if (!day) return res.status(400).json({ message: "Invalid indexes" });
 
+    day[mealType] = randomMeal;
     user.markModified("dietPlan");
     await user.save();
 
-    res.json({
+    return res.json({
       message: `✅ ${mealType} updated to new random meal.`,
       newMeal: randomMeal,
     });
   } catch (err) {
     console.error("❌ shuffle-meal error:", err);
-    res.status(500).json({ message: "Server error", error: err.message });
+    return res
+      .status(500)
+      .json({ message: "Server error", error: err.message });
   }
 });
 
