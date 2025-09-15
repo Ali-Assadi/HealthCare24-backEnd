@@ -48,6 +48,12 @@ router.post("/generate", async (req, res) => {
     user.exerciseRestrictions = [restriction]; // keep schema compatibility, but single item
     user.goal = goal;
 
+    if (restriction === "default") {
+      user.exerciseRestrictions = [];
+    } else {
+      user.exerciseRestrictions = [restriction];
+    }
+
     // Load plan pool for goal
     const planPool = await ExercisePlanModel.findOne({
       goal: String(goal).toLowerCase(),

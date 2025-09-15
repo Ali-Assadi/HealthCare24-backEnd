@@ -77,8 +77,14 @@ router.post("/generate-diet-plan", async (req, res) => {
     user.dietPlan = weeks;
     user.goal = goal;
     user.hasReviewedDiet = false;
-    user.dietRestriction = restriction; // single string (new)
-    user.dietRestrictions = [restriction]; // keep legacy shape too
+
+    if (restriction === "default") {
+      user.dietRestriction = "";
+      user.dietRestrictions = []; // ✅ clear instead of saving "default"
+    } else {
+      user.dietRestriction = restriction; // single string
+      user.dietRestrictions = [restriction]; // legacy shape
+    }
     await user.save();
 
     return res.json({
